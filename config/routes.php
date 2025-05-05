@@ -2,6 +2,7 @@
 $routes = array(
   'UserController' => array(
     'profile' => 'profile',
+    'logout' => 'logout',
   ),
   'MainController' => array(
     'auth' => 'auth',

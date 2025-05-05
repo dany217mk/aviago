@@ -1,7 +1,7 @@
 <?php
   class Controller{
     private  $isAuth = false;
-    private  $userModel;
+    public  $userModel;
     public $user;
 
 
@@ -15,12 +15,6 @@
       }
     }
 
-    public function getUserModel(){
-      return $this->userModel;
-    }
-    public function getUser(){
-      return $this->user;
-    }
 
     
 }

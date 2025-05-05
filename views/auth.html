@@ -21,6 +21,20 @@
           <h1>Регистрация</h1>
           <p>Быстро и легко.</p>
           <i id="close-reg" class="fa fa-times" aria-hidden="true"></i>
+          <? if (count($errors) >= 1 && $regActive == 'active'): ?>
+        <div class="alert alert-danger text-center alert-reg">
+          <? foreach ($errors as $error): ?>
+          <?= $error; ?>
+          <? endforeach; ?>
+        </div>
+      <? elseif(count($errors) > 1 && $regActive == 'active'): ?>
+        <div class="alert alert-danger text-center alert-reg">
+          <? foreach ($errors as $error): ?>
+          <li><?= $error; ?></li>
+          <? endforeach; ?>
+        </div>
+
+        <? endif; ?>
         </header>
         <div class="progress-bar">
           <div class="step">
@@ -53,28 +67,28 @@
           </div>
         </div>
         <div class="form-outer">
-          <form action="#">
+          <form method="post" id="form-reg">
             <div class="page slide-page">
               <div class="title">Основная информация:</div>
               <div class="field">
-                <input type="text" name="name" id="name" class="reg-text" placeholder="Имя">
-                <input type="text" name="surname" id="surname" class="reg-text" placeholder="Фамилия">
+                <input type="text" name="name" id="name" class="reg-text" placeholder="Имя*">
+                <input type="text" name="surname" id="surname" class="reg-text" placeholder="Фамилия*">
               </div>
               <div class="field">
                 <input type="text" name="patronymic" id="patronymic" class="reg-text" placeholder="Отчество">
               </div>
               <div class="field">
-                <button class="firstNext next"><i class="fa-solid fa-arrow-right"></i></button>
+                <button class="firstNext next" disabled><i class="fa-solid fa-arrow-right"></i></button>
               </div>
             </div>
   
             <div class="page">
               <div class="title">Контактная информация:</div>
               <div class="field">
-                <input type="email" name="email" class="reg-text" id="email-reg" placeholder="Почта">
+                <input type="email" name="email-reg" class="reg-text" id="email-reg" placeholder="Почта">
               </div>
               <div class="field">
-                <input type="password" name="password" class="reg-text" id="password-reg" placeholder="Новый пароль">
+                <input type="password" name="password-reg" class="reg-text" id="password-reg" placeholder="Новый пароль">
                 <input type="password" name="cpassword" class="reg-text" id="cpassword" placeholder="Повторите пароль">
               </div>
               <div class="field btns few">
@@ -86,29 +100,30 @@
             <div class="page">
               <div class="title">Паспортная информация:</div>
               <div class="field">
-                <input type="password" name="password" class="reg-text" id="seria-nomer" placeholder="Серия и номер паспорта">
+                <input type="text" name="passport" class="reg-text" id="passport" placeholder="Серия и номер паспорта">
               </div>
               <div class="field">
-                <input type="password" name="password" class="reg-text" id="seria-nomer" placeholder="Дата рождения">
-                <select>
-                  <option>Пол</option>
-                  <option>Мужчина</option>
-                  <option>Женщина</option>
+                <input type="text" name="birthdate" class="reg-text" id="birthdate" placeholder="Дата рождения">
+                <select name="gender" id="gender">
+                  <option value="-">Пол</option>
+                  <option value="М">Мужчина</option>
+                  <option value="Ж">Женщина</option>
                 </select>
               </div>
               <div class="field btns few">
                 <button class="prev-2 prev"><i class="fa-solid fa-arrow-left"></i></button>
-                <button class="next-2 next"><i class="fa-solid fa-arrow-right"></i></button>
+                <button class="next-2 next" disabled><i class="fa-solid fa-arrow-right"></i></button>
               </div>
             </div>
   
             <div class="page">
               <div class="info">
-                <p>Нажимая кнопку Регистрация, вы принимаете <a href="privacy">Условия, Политику использования данных и Политику в отношении файлов cookie.</a></p>
+                <span class="name-surname" id="name-surname"></span>
+                <p>нажимая кнопку Регистрация, вы принимаете <a href="privacy" target="_blank">Условия, Политику использования данных и Политику в отношении файлов cookie.</a></p>
               </div>
               <div class="field btns">
                 <button class="prev-3 prev"><i class="fa-solid fa-arrow-left"></i></button>
-                <button class="submit">Регистрация</button>
+                <button class="submit" name="signup" type="submit">Регистрация</button>
               </div>
             </div>
           </form>
@@ -136,7 +151,7 @@
   
           <? endif; ?>
         <div class="field input">
-          <input type="text" name="emailorlogin" id="email" autocomplete="off" class="text" placeholder="Email или login">
+          <input type="text" name="email" id="email" autocomplete="off" class="text" placeholder="Email">
           <div class="error" id="error-email"></div>
         </div>
         <div class="field input">

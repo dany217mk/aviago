@@ -90,12 +90,70 @@ class MainController
 
     $num = (int)date("Y");
 
-    $regActive=false;
-    $authActive=false;
+    $regActive='';
+    $authActive='';
     $errors=array();
-    $title = "Авторизация";
-    $styles = [CSS . '/auth.css'];
-    $scripts = [];
+
+    if(isset($_POST['signup'])){
+      
+
+      $regActive = 'active';
+      $authActive = '';
+
+      $name = $_POST['name'];
+      $surname = $_POST['surname'];
+      $patronymic = $_POST['patronymic'];
+      $email = $_POST['email-reg'];
+      $gender = $_POST['gender'];
+      $birthdate = $_POST['birthdate'];
+      $passport = $_POST['passport'];
+      $password = $_POST['password-reg'];
+
+      if ($gender == "М"){
+        $gender = 'male';
+      } else{
+        $gender = 'female';
+      }
+
+      $email_check = $this->userModel->checkIfUserExistAuth($email);
+      if($email_check != -1){
+          $errors['email'] = "Пользователь с этой почтой уже существует (" . $email . ")" ;
+      }
+      if(count($errors) === 0){
+        $password = md5($password);
+        $uid = $this->userModel->add($name, $surname, $patronymic, $password, $email, $passport, $birthdate, $gender);
+
+        if ($uid != -1){
+          $this->userModel->setAuth($uid);
+          header('location: ./profile');
+          exit();
+        } else{
+          $errors['db-error'] = "Ошибка при вставке данных в базу данных!";
+        }
+      } 
+      
+    }
+
+
+    if(isset($_POST['login'])){
+      $regActive = '';
+      $authActive = 'active';
+      $email = $_POST['email'];
+      $password = $_POST['password'];
+      $hash = md5($password);
+      $uid = $this->userModel->checkIfUserExistAuth($email, $hash);
+      if($uid != -1){
+        if ($uid == 0) {
+          $errors['email'] = "Неверный адрес электронной почты или пароль!";
+        } else {
+          $this->userModel->setAuth($uid);
+          header('location: ./profile');
+        }
+      }else{
+          $errors['email'] = "Похоже, ты еще не член aviago! Скорее регистрируйся!";
+      }
+    }
+
 
     require_once  './views/auth.html';
 
