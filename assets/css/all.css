@@ -1,0 +1,232 @@
+@font-face {
+	font-family: 'OpenSans';
+	src: url(../font/OpenSans-Regular.woff);
+}
+@font-face {
+	font-family: 'BaronNeue';
+	src: url(../font/BaronNeue.otf);
+}
+:root{
+  --main: #1D6FB6;
+  --main2: #212529;
+  --font: #434343;
+}
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  color: var(--font);
+  font-family: 'OpenSans', sans-serif;
+  font-size: 16px;
+  min-height: 100vh;
+  line-height: 1.154;
+  font-weight: 400;
+}
+a{
+  color: #007bff;
+  text-decoration: none;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+}
+::-webkit-scrollbar-thumb:hover{
+background-color: #ababab;
+}
+::-webkit-scrollbar{
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  margin-top: 10px;
+}
+input[type="checkbox"]{
+  -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+    width: 0.9em;
+    height: 0.9em;
+    border: 1px solid #bbc0c4;
+    background-color: #fff;
+    outline: 0;
+    font-size: inherit;
+    vertical-align: middle;
+    cursor: pointer;
+    border-radius: 3px;
+    margin-right: 10px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    margin-left: 10px;
+    margin-bottom: 3px;
+}
+input[type="checkbox"]:hover {
+    border-color: #6cbbf7;
+}
+input[type="checkbox"]:focus {
+    border-color: #6cbbf7;
+    box-shadow: 0 0 0 4px #0095ff26;
+}
+input[type="checkbox"]:checked {
+    border-color: #0095ff;
+    background-image: url(../img/checkbox.png);
+}
+button, input[type="submit"] {
+  border-color: rgb(216, 216, 216) rgb(209, 209, 209) rgb(186, 186, 186);
+  border-style: solid;
+  border-width: 1px;
+  padding: .5rem 1rem;
+  display: inline-block;
+  font: 400 14px system-ui;
+	transition: all 0.3s ease;
+}
+button:hover, input[type="submit"]:hover {
+	color: #fff;
+  background: #1d49aa;
+}
+button:focus, input[type="submit"]:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px #cbd6ee;
+}
+input[type="text"], select{
+	width: 300px;
+	font-size: 13px;
+	padding: .5rem 1rem;
+	border: 1px solid #cecece;
+	background: #F6F6f6;
+	border-radius: 8px;
+	transition: all 0.4s ease;
+}
+input[type="text"]:hover, select:hover{
+ border-color: #0f888f;
+}
+input[type="text"]:focus, select:focus{
+ border-color: #0f888f;
+ outline: none;
+ box-shadow: 0 0 0 0.2rem rgb(15 136 143 / 35%);
+}
+input[type=radio] {
+    width: 1rem;
+    height: 1rem;
+    position: relative;
+    background: #ccc;
+    border: none;
+    border-radius: 50%;
+    transition: .3s;
+    appearance: none;
+    cursor: pointer;
+}
+input[type=radio]:checked {
+	background: var(--main);
+}
+input[type=radio]:not(:checked) {
+	background: #ccc;
+}
+input[type=radio] + label {
+    margin-left: .625rem;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.header{
+  background: var(--main);
+}
+.header__block{
+  width: 1440px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.header__logo{
+  width: 60px;
+}
+.header__item{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+.header__title{
+  font-size: 28px;
+  font-weight: 500;
+  font-family: 'BaronNeue';
+  color: #ffffff;
+  margin-left: 10px;
+}
+.header__item.header__item-nav{
+  display: flex;
+  gap: 10px;
+  align-items: normal;
+  color: #fff;
+}
+
+.nav{
+  background: var(--main);
+  padding-top: 25px;
+  padding-bottom: 25px;
+}
+.nav__block{
+  width: 1440px;
+  margin: 0 auto;
+}
+.nav__block ul{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  list-style: none;
+}
+.nav__block a{
+  color: #ffffff;
+  font-size: 20px;
+  border-bottom: 4px solid transparent;
+}
+.nav__block a.active{
+  border-color: #fff;
+}
+main{
+  margin-top: 40px;
+}
+main > div{
+  width: 1440px;
+  margin: 0 auto;
+}
+
+
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+th {
+  background-color: var(--main);
+  color: white;
+  font-weight: bold;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tr:hover {
+  background-color: #ddd;
+}
+
+td {
+  word-wrap: break-word;
+  white-space: normal;
+}

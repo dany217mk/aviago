@@ -1,0 +1,22 @@
+.report{
+    min-height: 65vh;
+    padding-top: 100px;
+  }
+  .report__block{
+    padding: 12px 20px;
+    font-weight: 400;
+    width: 1160px;
+    margin: 50px auto;
+    line-height: 1.5;
+    font-size: 16px;
+    border: 1px solid transparent;
+  }
+  .report__link{
+    color: #007bff;
+    text-decoration: none;
+    transition: all 0.4s ease;
+  }
+  .report__link:hover{
+      color: #0056b3;
+    text-decoration: underline;
+  }

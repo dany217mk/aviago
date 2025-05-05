@@ -1,0 +1,33 @@
+<nav class="nav">
+    <div class="nav__block">
+        <ul>
+            <li><a href="<?= FULL_SITE_ROOT; ?>">Авиабилеты</a></li>
+            <li><a href="<?= FULL_SITE_ROOT; ?>/flight_board" class="active">Онлайн-табло</a></li>
+            <li><a href="<?= FULL_SITE_ROOT; ?>/check_in">Онлайн регистрация</a></li>
+            <li><a href="<?= FULL_SITE_ROOT; ?>/charter_request">Создать заявку на чартерный рейс</a></li>
+        </ul>
+    </div>
+</nav>
+<main>
+    <div>
+        <h1>Онлайн-табло</h1>
+        <table>
+            <thead>
+                <tr>
+                    <?php foreach ($columns as $column) : ?>
+                        <th><?= htmlspecialchars($column); ?></th>
+                    <?php endforeach; ?>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($data as $item) : ?>
+                    <tr>
+                        <?php foreach ($item as $value) : ?>
+                            <td><?= htmlspecialchars($value); ?></td>
+                        <?php endforeach; ?>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</main>
