@@ -1,0 +1,37 @@
+.create_form{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 80%;
+    margin: 20px auto;
+    border: 1px solid #eee;
+    box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);
+    border-radius: 30px;
+    padding: 20px;
+    
+}
+.create_form label{
+    margin-right: 15px;
+}
+
+  .report{
+    position: fixed;
+    border: 1px solid #434343;
+    background: #1a1a1acf;
+    border-radius: 5px;
+    color: white;
+    z-index: 3;
+    padding: 7px;
+    display: none;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1003;
+    max-width: 300px;
+  }
+  .report.active{
+    display: block;
+    opacity: .8;
+  }
+   .report.darker{
+     opacity: 0;
+   }

@@ -1,0 +1,26 @@
+<div class="clm">
+    <h1 class="fio"><?= $this->user['name'] ?> <?= $this->user['surname'] ?> <?= $this->user['patronymic'] ?></h1>
+    <p class="info_p">Мои данные: <a href="./report/501">(изменить данные)</a></p>
+    <table class="info_table">
+        <tr>
+            <th>Почта:</th>
+            <td><?= $this->user['email']; ?></td>
+        </tr>
+        <tr>
+            <th>Роль на сайте</th>
+            <td><?= $this->user['role_name']; ?></td>
+        </tr>
+        <tr>
+            <th>Пол:</th>
+            <td><?= $user_passenger['gender']; ?></td>
+        </tr>
+        <tr>
+            <th>Дата рождения:</th>
+            <td><?= $user_passenger['date_of_birth']; ?></td>
+        </tr>
+        <tr>
+            <th>Серия и номер паспорта:</th>
+            <td><?= $user_passenger['passport_series_number']; ?></td>
+        </tr>
+    </table>
+</div>

@@ -1,0 +1,38 @@
+<div class="clm">
+    <div class="navi">
+        <h2>Работники авиакомпании</h2>
+        <a href="<?= './' . $type . '/add'?>" class="link_add">Добавить</a>
+    </div>
+    <table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>ФИО</th>
+            <th>Роль</th>
+            <th>Должность</th>
+            <th>Устроен</th>
+            <th>Email</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        <? foreach($data as $item): ?>
+            <tr>
+                <td><?= $item['id']; ?></td>
+                <td><?= $item['worker_surname']; ?> <?= $item['worker_name']; ?> <?= $item['worker_patronymic']; ?></td>
+                <td><?= $item['role_name']; ?></td>
+                <td><?= $item['position_details']; ?></td>
+                <td><?= $item['hired_at']; ?></td>
+                <td><?= $item['worker_email']; ?></td>
+                <td>
+                    <a href="<?= $type . '/edit/' . $item['id']; ?>" class="action-btn">Редактировать</a>
+                    <a href="<?= $type . '/delete/' . $item['id']; ?>" class="action-btn">Удалить</a>
+                </td>
+            </tr>
+        <? endforeach; ?>
+    </tbody>
+    </table>
+     <? if (count($data) == 0): ?>
+        <i>У авиакомпании пока ни одного сотрудника :(</i>
+    <? endif; ?>
+</div>

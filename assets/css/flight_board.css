@@ -1,0 +1,16 @@
+.table_flight_board, .nothing{
+    margin-top: 20px;
+}
+.flight_board-nav{
+    margin-bottom: 15px;
+    display: flex;
+    gap: 30px;
+}
+.flight_board-nav a{
+    padding-bottom: 4px;
+    font-size: 18px;
+    color: #434343;
+}
+.flight_board-nav a.active{
+    border-bottom: 4px solid var(--main);
+}

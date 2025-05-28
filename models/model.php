@@ -42,4 +42,11 @@ class Model
         $stmt->execute($params);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+    public function returnAllfetchAssoc($query, $params = [])
+    {
+        $stmt = $this->con->prepare($query);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

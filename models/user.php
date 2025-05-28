@@ -91,6 +91,21 @@ class User extends Model
         }
     }
 
+    public function updateUserPassword($user_id, $password){
+        $query = "UPDATE user_account  SET password = :hash
+                WHERE id = :user_id;";
+        $this->actionQuery($query, ['hash' => $password, 'user_id' => $user_id, ]);
+        $query2 = "UPDATE worker_details  SET is_password_changed = true
+                WHERE user_id = :user_id;";
+        $this->actionQuery($query2, ['user_id' => $user_id, ]);
+    }
+
+    public function getPassengerById($user_id){
+        $query = "SELECT * FROM user_passenger WHERE user_id = :user_id";
+        $data = $this->returnAssoc($query, ['user_id' => $user_id]);
+        return $data;
+    }
+
 
     public function setAuth($uid){
         $token = $this->helper->generationToken();
@@ -101,6 +116,14 @@ class User extends Model
         setcookie('uid', $uid, time() + 2*24*3600, '/');
         setcookie('t', $token, time() + 2*24*3600, '/');
         setcookie('tt', $timeToken, time() + 2*24*3600, '/');
+    }
+
+    public function getUserAirline($uid){
+        $query = "SELECT airline.*, airport.name as airport_name, airport.iata  as airport_iata FROM airline 
+        LEFT JOIN airport ON airport.id = airline.airport_id WHERE airline.user_id = :uid";
+        $data = $this->returnAssoc($query, ["uid" => $uid]);
+        return $data;
+
     }
 
 

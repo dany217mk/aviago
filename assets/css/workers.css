@@ -1,0 +1,80 @@
+.navi{
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 15px;
+}
+.link_add{
+  border: 2px solid #ccc;
+  padding: 1rem;
+  color: #434343;
+  text-decoration: none;
+  width: 200px;
+  display: block;
+  transition: all 0.3s ease;
+}
+.link_add:hover{
+    background: #ccc;
+}
+tbody td:last-child a{
+  border: 1px solid rgb(118, 118, 118);
+  text-align: center;
+  text-decoration: none;
+  background: rgb(239, 239, 239);
+  margin-left: 15px;
+  padding: 1px 6px;
+}
+tbody td:last-child a:first-child{
+  color: green;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+tbody td:last-child a:last-child{
+  color: red;
+}
+
+
+
+.form_add{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    margin: 20px auto;
+    padding: 20px;
+    
+}
+.form_add label{
+    margin-right: 15px;
+}
+.form-flex-block{
+  display: flex;
+  align-items: first;
+}
+
+
+.linkBack{
+  margin: 20px 10px;
+}
+.linkBack a{
+  padding: .5rem 1rem;
+  color: #434343;
+  font-size: 20px;
+  border-radius: 100px;
+  transition: all 0.4s ease;
+  text-decoration: none;;
+}
+.linkBack a:hover{
+  border-radius: .25rem;
+  color: #434343;
+  box-shadow: 0 0 0 6px #f3f1ed;
+  background: #ccc;
+}
+.linkBack a i{
+  padding-right: 10px;
+}
+
+.dop-info{
+  font-size: 12px;
+  margin-left: 10px;
+}

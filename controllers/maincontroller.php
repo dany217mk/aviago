@@ -18,13 +18,14 @@ class MainController
     $scripts = [];
     $styles = [];
     $title  = SITE_NAME;
+    $menu_active = 'home';
 
     $flightModel = new Flight();
     $response = $flightModel->getAll();
     $data = $response['data'];
     $columns = $response['columns'];
 
-    $this->helper->outputCommonHead($title, $styles);
+    $this->helper->outputCommonHead($title, $menu_active, $styles);
     require_once  './views/home.html';
     $this->helper->outputCommonFoot($scripts);
   }
@@ -33,7 +34,7 @@ class MainController
     $incident = $data[0];
     $title = $incident;
     $styles = [CSS . '/report.css'];
-    $this->helper->outputCommonHead($title, $styles);
+    $this->helper->outputCommonHead($title, '', $styles);
     require_once  './views/report.html';
     $this->helper->outputCommonFoot();
 }
@@ -47,8 +48,9 @@ class MainController
     $response = $charterModel->getAll();
     $data = $response['data'];
     $columns = $response['columns'];
+    $menu_active = 'charter_request';
 
-    $this->helper->outputCommonHead($title, $styles);
+    $this->helper->outputCommonHead($title, $menu_active, $styles);
     require_once  './views/charter-request.html';
     $this->helper->outputCommonFoot($scripts);
   }
@@ -62,24 +64,89 @@ class MainController
     $response = $flightModel->getAll();
     $data = $response['data'];
     $columns = $response['columns'];
+    $menu_active = 'check_in';
 
-    $this->helper->outputCommonHead($title, $styles);
+    $this->helper->outputCommonHead($title, $menu_active, $styles);
+    require_once   './views/common/nav.html';
     require_once  './views/check-in.html';
     $this->helper->outputCommonFoot($scripts);
   }
 
   public function actionFlightBoard(){
     $title = "Онлайн табло";
-    $styles = [];
+    $styles = [CSS . '/flight_board.css'];
     $scripts = [];
 
-    $flightModel = new Flight();
-    $response = $flightModel->getAll();
-    $data = $response['data'];
-    $columns = $response['columns'];
+    $menu_active = 'flight_board';
 
-    $this->helper->outputCommonHead($title, $styles);
+    $flightModel = new Flight();
+
+    if (isset($_POST['departure'])){
+      $dep = $_POST['departure'];
+      $arr = $_POST['arrival'];
+      $date = $_POST['date'];
+      $flights = $flightModel->getSearchFlights($dep, $arr, $date);
+      $data = $flights['data'];
+      $columns = $flights['columns'];
+    }
+    
+    $airportModel = new Airport();
+    $airports = $airportModel->getAll();
+
+    setlocale(LC_TIME, 'ru_RU.UTF-8'); 
+    $dates = [];
+    $startDate = new DateTime('yesterday');
+
+    for ($i = 0; $i <= 6; $i++) {
+        $isoFormat = $startDate->format('Y-m-d'); 
+        $prettyFormat = strftime('%e %B %Y', $startDate->getTimestamp()); 
+        $prettyFormat = mb_convert_case(trim($prettyFormat), MB_CASE_TITLE, "UTF-8"); 
+
+        $dates[] = [$isoFormat, $prettyFormat];
+        $startDate->modify('+1 day');
+    }
+
+
+    $this->helper->outputCommonHead($title, $menu_active, $styles);
     require_once  './views/flight-board.html';
+    $this->helper->outputCommonFoot($scripts);
+  }
+
+
+  public function actionFlightNumber(){
+    $title = "Онлайн табло";
+    $styles = [CSS . '/flight_board.css'];
+    $scripts = [];
+
+    $menu_active = 'flight_board';
+
+    $flightModel = new Flight();
+
+    if (isset($_POST['flight_number'])){
+      $flight_number = $_POST['flight_number'];
+      $date = $_POST['date'];
+      $flights = $flightModel->getSearchFlightsNumber($flight_number, $date);
+      $data = $flights['data'];
+      $columns = $flights['columns'];
+    }
+
+
+    setlocale(LC_TIME, 'ru_RU.UTF-8'); 
+    $dates = [];
+    $startDate = new DateTime('yesterday');
+
+    for ($i = 0; $i <= 6; $i++) {
+        $isoFormat = $startDate->format('Y-m-d'); 
+        $prettyFormat = strftime('%e %B %Y', $startDate->getTimestamp()); 
+        $prettyFormat = mb_convert_case(trim($prettyFormat), MB_CASE_TITLE, "UTF-8"); 
+
+        $dates[] = [$isoFormat, $prettyFormat];
+        $startDate->modify('+1 day');
+    }
+
+
+    $this->helper->outputCommonHead($title, $menu_active, $styles);
+    require_once  './views/flight-number.html';
     $this->helper->outputCommonFoot($scripts);
   }
 
@@ -109,6 +176,18 @@ class MainController
       $passport = $_POST['passport'];
       $password = $_POST['password-reg'];
 
+      $birthmass = explode(".", $birthdate);
+
+      $day = (int)$birthmass[0];
+      $month = (int)$birthmass[1];
+      $year = (int)$birthmass[2];
+
+      if (!checkdate($month, $day, $year)){
+        $errors['date'] = "Некорректная дата!";
+      }
+
+      $date = "{$year}-{$month}-{$day}";    
+
       if ($gender == "М"){
         $gender = 'male';
       } else{
@@ -121,7 +200,7 @@ class MainController
       }
       if(count($errors) === 0){
         $password = md5($password);
-        $uid = $this->userModel->add($name, $surname, $patronymic, $password, $email, $passport, $birthdate, $gender);
+        $uid = $this->userModel->add($name, $surname, $patronymic, $password, $email, $passport, $date, $gender);
 
         if ($uid != -1){
           $this->userModel->setAuth($uid);

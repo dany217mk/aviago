@@ -1,8 +1,18 @@
 <?php
 $routes = array(
+  'AirlineController' => array(
+    'create_organization' => 'create',
+  ),
+  'WorkerController' => array(
+    'workers' => 'worker',
+    'worker/add' => 'add',
+    'worker/edit/([0-9]+)' => 'edit/$1',
+    'worker/delete' => 'delete',
+  ),
   'UserController' => array(
     'profile' => 'profile',
     'logout' => 'logout',
+    'change_password' => 'changePassword'
   ),
   'MainController' => array(
     'auth' => 'auth',
@@ -10,6 +20,7 @@ $routes = array(
      'charter_request' => 'charterRequest',
      'check_in' => 'checkIn',
      'flight_board' => 'flightBoard',
+     'flight_number' => 'flightNumber',
       '' => 'index'
     )
 );

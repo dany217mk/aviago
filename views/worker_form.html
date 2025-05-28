@@ -1,0 +1,56 @@
+<div class="clm">
+    <div>
+        <div class="linkBack">
+        <a href="<?=FULL_SITE_ROOT?>/workers"><i class="fa-solid fa-arrow-left"></i>назад</a>
+      </div><h1>Управление сотрудниками авиакомпании</h1>
+    </div>
+    <form class="form_add" id="worker_form_add" method="POST">
+        <div>
+            <label>Имя:</label>
+            <input type="text" name="name" id="name" value="<?= isset($worker) ? $worker['name']: ''; ?>">
+        </div>
+        <div>
+            <label>Фамилия:</label>
+            <input type="text" name="surname" id="surname" value="<?= isset($worker) ? $worker['surname']: ''; ?>">
+        </div>
+        <div>
+            <label>Отчество:</label>
+            <input type="text" name="patronymic" id="patronymic" value="<?= isset($worker) ? $worker['patronymic']: ''; ?>">
+        </div>
+        <div>
+            <label>Дата устройства:</label>
+            <input type="text" name="hired_at" placeholder="yyyy-mm-dd" id="hired_at" value="<?= isset($worker) ? $worker['hired_at']: ''; ?>">
+        </div>
+        <div>
+            <label>Роль:</label>
+            <select name="role" id="role">
+                <option value="2" <?= (isset($worker) and  $worker['role_id']==2) ? 'selected': ''; ?>>Планировщик</option>
+                <option value="5" <?= (isset($worker) and  $worker['role_id']==5) ? 'selected': ''; ?>>Пилот</option>
+                <option value="6" <?= (isset($worker) and  $worker['role_id']==6) ? 'selected': ''; ?>>Бортпроводник</option>
+            </select>
+        </div>
+        <div class="form-flex-block">
+            <label>Описание должности:</label>
+            <textarea name="position_details" id="position_details"><?= isset($worker) ? $worker['position_details']: ''; ?></textarea>
+        </div>
+        <div>
+            <label>Email:</label>
+            <input type="email" name="email" id="email" value="<?= isset($worker) ? $worker['email']: ''; ?>">
+        </div>
+        <? if(isset($worker)): ?>
+            <? if ($worker['is_password_changed']): ?>
+                <div>Пароль изменен сотрудником</div>
+            <? else: ?>
+                <div>Пароль остается заданным администратором авиакомпании</div>
+            <? endif; ?>
+        <? else: ?>
+            <div>
+                <label>Пароль:</label>
+                <input type="password" name="password" id="password" value="<?= isset($worker) ? $worker['password']: ''; ?>">
+            </div>
+        <? endif; ?>
+        <div>
+            <input type="submit" value="Отправить"><span class="dop-info">Передайте email и пароль сотруднику</span>
+        </div>
+    </form>
+</div>

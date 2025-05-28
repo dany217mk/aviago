@@ -4,9 +4,18 @@
         <img src="<?= IMG ;?>/logo2.png" alt="logo" class="header__logo">
         <h1 class="header__title">AviaGo</h1>
       </a>
-      <a href="<?= FULL_SITE_ROOT; ?>\auth" class="header__item header__item-nav">
-        <i class="fa-solid fa-user"></i>
-        <span>Профиль</span>
-      </a>
+      <div class="header__item">
+        <a href="<?= FULL_SITE_ROOT; ?>\auth" class="header__item-nav">
+           <i class="fa-solid fa-user"></i>
+            <span>Профиль</span>
+          </a>
+          <? if (isset($_COOKIE['uid'])): ?>
+          <a href="<?= FULL_SITE_ROOT; ?>\logout" class="header__item-nav">
+           <i class="fa-solid fa-right-from-bracket"></i>
+            <span>Выйти</span>
+          </a>
+          <? endif;?>
+      </div>
+      
     </div>
 </header>

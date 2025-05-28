@@ -1,0 +1,29 @@
+<div class="clm">
+    <h1 class="fio"><?= $this->user['name'] ?> <?= $this->user['surname'] ?> <?= $this->user['patronymic'] ?></h1>
+    <p class="info_p">Мои данные:</p>
+    <table class="info_table">
+        <tr>
+            <th>Почта:</th>
+            <td><?= $this->user['email']; ?></td>
+        </tr>
+        <tr>
+            <th>Роль на сайте</th>
+            <td><?= $this->user['role_name']; ?></td>
+        </tr>
+        <tr>
+            <th>Компания:</th>
+            <td>
+                <img alt="logo" width="40" src="<?= AIRLINE_IMG; ?>/<?= $user_worker['airline_logo']; ?>">
+                <?= $user_worker['airline_name']; ?>
+            </td>
+        </tr>
+        <tr>
+            <th>Позиция:</th>
+            <td><?= $user_worker['position_details']; ?></td>
+        </tr>
+        <tr>
+            <th>Дата устройства:</th>
+            <td><?= $user_worker['hired_at']; ?></td>
+        </tr>
+    </table>
+</div>

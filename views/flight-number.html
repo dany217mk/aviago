@@ -9,29 +9,13 @@
         </div>
 
         <div class="flight_board-nav">
-            <a href="<?= FULL_SITE_ROOT; ?>/flight_board" class="active">Поиск по направлению</a>
-            <a href="<?= FULL_SITE_ROOT; ?>/flight_number">Поиск по номеру рейса</a>
+            <a href="<?= FULL_SITE_ROOT; ?>/flight_board">Поиск по направлению</a>
+            <a href="<?= FULL_SITE_ROOT; ?>/flight_number" class="active">Поиск по номеру рейса</a>
         </div>
 
         <form class="flight_info_board" method="post">
-            <select name="departure">
-                <option value="0">Откуда</option>
-                <?php foreach ($airports as $airport): ?>
-                    <option value="<?= $airport['id']; ?>"
-                        <?= (isset($_POST['departure']) && $_POST['departure'] == $airport['id']) ? 'selected' : ''; ?>>
-                        <?= htmlspecialchars($airport['city'] . " " . $airport['iata']); ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-            <select name="arrival">
-                <option value="0">Куда</option>
-                <?php foreach ($airports as $airport): ?>
-                    <option value="<?= $airport['id']; ?>"
-                        <?= (isset($_POST['arrival']) && $_POST['arrival'] == $airport['id']) ? 'selected' : ''; ?>>
-                        <?= htmlspecialchars($airport['city'] . " " . $airport['iata']); ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
+            <input type="text" placeholder="Номер рейса" name="flight_number"
+                value="<?= isset($_POST['flight_number']) ? htmlspecialchars($_POST['flight_number']) : '' ?>">
             <select name="date">
                 <option value="2000-01-01">Дата вылета</option>
                 <?php foreach ($dates as $date): ?>
