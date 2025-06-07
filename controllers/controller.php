@@ -1,11 +1,13 @@
 <?php
   class Controller{
     private  $isAuth = false;
-    private  $userModel;
+    public  $userModel;
     public $user;
+    public $helper;
 
 
     public function __construct(){
+      $this->helper = new Helper();
       $this->userModel = new User();
       $this->isAuth = $this->userModel->isAuth();
       if ($this->isAuth) {
@@ -15,12 +17,6 @@
       }
     }
 
-    public function getUserModel(){
-      return $this->userModel;
-    }
-    public function getUser(){
-      return $this->user;
-    }
 
     
 }

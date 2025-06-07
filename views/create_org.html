@@ -1,0 +1,38 @@
+<div class="clm">
+    <h1>Создать организацию</h1>
+    <form class="create_form" id="create_form" method="post" enctype="multipart/form-data">
+        <div>
+            <label>Название авиакомпании:</label>
+            <input type="text" name="name" id="name">
+        </div>
+        <div>
+            <label>Страна авиакомпании:</label>
+            <select id="countrySelect" name="country">
+                <option selected value="RU">Россия</option>
+            </select>
+        </div>
+        <div>
+            <label>Базовый аэропорт:</label>
+            <select name="airport">
+                <? foreach($airports as $airport): ?>
+                    <option value="<?= $airport['id']; ?>"><?= $airport['name'] . ' ' . $airport['iata']; ?></option>
+                <? endforeach; ?>
+            </select>
+        </div>
+         <div>
+            <label>ИКАО код авиакомпании:</label>
+            <input type="text" name="icao" id="icao">
+        </div>
+        <div>
+            <label>ИАТА код авиакомпании:</label>
+            <input type="text" name="iata" id="iata">
+        </div>
+        <div>
+            <label>Логотип авиакомпании</label>
+            <input type="file" name="airline_img" required class="img" accept="image/png,image/jpg,image/jpeg,image/gif">
+        </div>
+        <div>
+            <input type="submit" value="Создать">
+        </div>
+    </form>
+</div>

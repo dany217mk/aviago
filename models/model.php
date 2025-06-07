@@ -1,7 +1,7 @@
 <?php
 class Model
 {
-    private PDO $con;
+    public PDO $con;
 
     public $helper;
 
@@ -26,16 +26,27 @@ class Model
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function returnActionQuery($query) {
-            return $this->con->query($query);
+    public function returnActionQuery($query, $params = []) {
+        $stmt = $this->con->prepare($query); 
+        $stmt->execute($params);             
+        return $stmt;                        
     }
 
-    public function actionQuery($query) {
-        $this->con->exec($query); 
+    public function actionQuery($query, $params) {
+        $stmt = $this->con->prepare($query); 
+        $stmt->execute($params);  
     }
 
-    public function returnAssoc($query) {
-        $stmt = $this->con->query($query);   
-        return $stmt->fetch(PDO::FETCH_ASSOC);    
+    public function returnAssoc($query, $params = []) {
+        $stmt = $this->con->prepare($query);
+        $stmt->execute($params);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function returnAllfetchAssoc($query, $params = [])
+    {
+        $stmt = $this->con->prepare($query);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

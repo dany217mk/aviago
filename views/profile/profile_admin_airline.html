@@ -1,0 +1,39 @@
+<div class="clm">
+    <h1 class="fio"><?= $this->user['name'] ?> <?= $this->user['surname'] ?> <?= $this->user['patronymic'] ?></h1>
+    <p class="info_p">Мои данные:</p>
+    <table class="info_table">
+        <tr>
+            <th>Почта:</th>
+            <td><?= $this->user['email']; ?></td>
+        </tr>
+        <tr>
+            <th>Роль на сайте</th>
+            <td><?= $this->user['role_name']; ?></td>
+        </tr>
+    </table>
+    <hr>
+    <h2 class="airline_name">Авиакомпания «<?= $user_airline['name']; ?>»</h2>
+    <p class="info_p_airline">Данные авиакомпании: <a href="./report/501">(изменить данные)</a></p>
+    <table class="info_table">
+        <tr>
+            <th>Логотип:</th>
+            <td><img alt="logo" width="40" src="<?= AIRLINE_IMG; ?>/<?= $user_airline['logo']; ?>"></td>
+        </tr>
+        <tr>
+            <th>ИКАО</th>
+            <td><?= $user_airline['icao']; ?></td>
+        </tr>
+        <tr>
+            <th>ИАТА</th>
+            <td><?= $user_airline['iata']; ?></td>
+        </tr>
+        <tr>
+            <th>Страна</th>
+            <td><?= $user_airline['country']; ?></td>
+        </tr>
+        <tr>
+            <th>Базовый аэропорт</th>
+            <td><?= $user_airline['airport_name']; ?></td>
+        </tr>
+    </table>
+</div>

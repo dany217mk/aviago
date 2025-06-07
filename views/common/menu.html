@@ -1,0 +1,10 @@
+<section class="menu">
+    <ul>
+        <? foreach($menu as $item): ?>
+            <li><a href="<?= FULL_SITE_ROOT . '/' . $item['link']; ?>">
+                <?= $item['icon']; ?>
+                <span><?= $item['name']; ?></span>
+            </a></li>
+        <? endforeach; ?>
+    </ul>
+</section>

@@ -23,9 +23,8 @@ class Router
                     $requestedAction = 'action' . ucfirst($action);
                     $isPageFound = true;
                     if (!method_exists($requestedController, $requestedAction)) {
-                        
-                     header("Location: " . SITE_PAGE_NOT_FOUND);
-                      exit;
+                        header("Location: " . SITE_PAGE_NOT_FOUND);
+                        exit;
                     }
                     call_user_func(array($requestedController, $requestedAction), $actionWithParameters);
                     break 2;
