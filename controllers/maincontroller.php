@@ -34,20 +34,81 @@ class MainController
     $incident = $data[0];
     $title = $incident;
     $styles = [CSS . '/report.css'];
+    if (isset($_COOKIE['charter_code'])){
+      $charter_code = $_COOKIE['charter_code'];
+      unset($_COOKIE['charter_code']);
+    }
     $this->helper->outputCommonHead($title, '', $styles);
     require_once  './views/report.html';
     $this->helper->outputCommonFoot();
 }
 
-  public function actionCharterRequest(){
-    $title = "Заявка на чартер";
-    $styles = [CSS . '/home.css'];
+
+public function actionCharterCheck() {
+    if (isset($_POST['charter_code'])){
+      $charter_code = $_POST['charter_code'];
+      $charterModel = new Charter();
+      $data = $charterModel->getCharterRequestByCode($charter_code);
+    }
+    $title = "Проверка заявки на чартер";
+    $styles = [CSS . '/charter.css'];
     $scripts = [];
 
-    $charterModel = new Charter();
-    $response = $charterModel->getAll();
-    $data = $response['data'];
-    $columns = $response['columns'];
+    $menu_active = 'charter_request';
+
+    $this->helper->outputCommonHead($title, $menu_active, $styles);
+    require_once  './views/charter-check.html';
+    $this->helper->outputCommonFoot($scripts);
+}
+
+  public function actionCharterRequest(){
+
+    if(isset($_POST['submit-btn-charter'])){
+      $charterModel = new Charter();
+      $departure = $_POST['departure'];
+      $arrival = $_POST['arrival'];
+      $airline = ($_POST['airline'] == 0) ? NULL : $_POST['airline'];
+      if ($airline == "null"){
+        $airline = null;
+      }
+      $flight_date = $_POST['flight-date'];
+      $passenger_number = $_POST['passengers-count'];
+      if (isset($_POST['allow_other_psng'])){
+        $allow_other = true;
+      } else{
+        $allow_other = false;
+      }
+      if (isset($_POST['contact-fio'])){
+        $user_id = null;
+        $fio = $_POST['contact-fio'];
+        $email = $_POST['email'];
+        $additional_info = $_POST['additional-info'];
+        $organization = $_POST['organization'];
+      } else{
+        $user_id = $_COOKIE['uid'];
+      }
+      if (is_null($user_id)){
+        $res = $charterModel->addWithContact($departure, $arrival, $airline, $flight_date, $passenger_number, $allow_other, $fio, $email, $organization, $additional_info);
+      } else{
+        $res = $charterModel->addWithUser($departure, $arrival, $airline, $flight_date, $passenger_number, $allow_other, $user_id);
+      }
+      $request = $charterModel->getCharterRequestById($res);
+      setcookie('charter_code', $request['request_code'], time() + 1000, '/');
+      header("Location: ./report/999");
+      exit;
+    }
+
+
+
+    $title = "Заявка на чартер";
+    $styles = [CSS . '/charter.css'];
+    $scripts = ['charter.js', 'notification.js'];
+
+    $airportModel = new Airport();
+    $airports = $airportModel->getAll();
+
+    $airlineModel = new Airline();
+    $airlines = $airlineModel->getAll();
     $menu_active = 'charter_request';
 
     $this->helper->outputCommonHead($title, $menu_active, $styles);
@@ -176,17 +237,15 @@ class MainController
       $passport = $_POST['passport'];
       $password = $_POST['password-reg'];
 
-      $birthmass = explode(".", $birthdate);
+      $birthmass = explode("-", $birthdate);
 
-      $day = (int)$birthmass[0];
+      $day = (int)$birthmass[2];
       $month = (int)$birthmass[1];
-      $year = (int)$birthmass[2];
+      $year = (int)$birthmass[0];
 
       if (!checkdate($month, $day, $year)){
         $errors['date'] = "Некорректная дата!";
       }
-
-      $date = "{$year}-{$month}-{$day}";    
 
       if ($gender == "М"){
         $gender = 'male';
@@ -200,7 +259,7 @@ class MainController
       }
       if(count($errors) === 0){
         $password = md5($password);
-        $uid = $this->userModel->add($name, $surname, $patronymic, $password, $email, $passport, $date, $gender);
+        $uid = $this->userModel->add($name, $surname, $patronymic, $password, $email, $passport, $birthdate, $gender);
 
         if ($uid != -1){
           $this->userModel->setAuth($uid);

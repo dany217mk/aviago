@@ -18,6 +18,7 @@ $routes = array(
     'auth' => 'auth',
      'report/([0-9]+)' => 'report/$1',
      'charter_request' => 'charterRequest',
+     'charter_check' => 'charterCheck',
      'check_in' => 'checkIn',
      'flight_board' => 'flightBoard',
      'flight_number' => 'flightNumber',

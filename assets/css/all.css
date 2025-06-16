@@ -92,7 +92,7 @@ button:focus, input[type="submit"]:focus {
   outline: none;
   box-shadow: 0 0 0 4px #cbd6ee;
 }
-input[type="text"], input[type="file"], input[type="email"], input[type="password"], select{
+input[type="text"], input[type="date"], input[type="file"], input[type="email"], input[type="password"], input[type="number"], select{
 	width: 300px;
 	font-size: 13px;
 	padding: .5rem 1rem;
@@ -100,6 +100,16 @@ input[type="text"], input[type="file"], input[type="email"], input[type="passwor
 	background: #F6F6f6;
 	border-radius: 8px;
 	transition: all 0.4s ease;
+}
+input.charter_input{
+  background: #fff;
+  border-radius: 4px;
+  padding: 5px 10px
+}
+.bg-fff{
+  background: #fff;
+  border-radius: 4px;
+  padding: 5px 10px
 }
 textarea{
   width: 300px;
@@ -111,10 +121,10 @@ textarea{
 	transition: all 0.4s ease;
   resize: vertical;
 }
-input[type="text"]:hover, select:hover, input[type="email"]:hover, input[type="password"]:hover, input[type="file"]:hover{
+input[type="text"]:hover, input[type="date"]:hover, select:hover, input[type="email"]:hover, input[type="password"]:hover, input[type="file"]:hover, input[type="number"]:hover{
  border-color: #0f888f;
 }
-input[type="text"]:focus, select:focus, input[type="email"]:focus, input[type="password"]:focus, input[type="file"]:focus{
+input[type="text"]:focus, input[type="date"]:hover, select:focus, input[type="email"]:focus, input[type="password"]:focus, input[type="file"]:focus, input[type="number"]:focus{
  border-color: #0f888f;
  outline: none;
  box-shadow: 0 0 0 0.2rem rgb(15 136 143 / 35%);
@@ -320,3 +330,49 @@ main > div{
    .report.darker{
      opacity: 0;
    }
+
+
+
+   #notification{
+    opacity: .8;
+    border-radius: 100px;
+    padding: .5rem 1rem;
+    transition: all .6s;
+    display: none;
+    position: fixed;
+    margin: 20px;
+    cursor: default;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 50px;
+    user-select: none;
+    z-index: 1003;
+    color: #fff;
+  }
+  #notification.usual{
+    background: #eee;
+    color: #434343;
+  }
+  #notification.success{
+    background: green;
+  }
+  #notification.warning{
+    background: #fff3cd;
+    color: #434343;
+  }
+  #notification.error{
+    background: red;
+  }
+  #notification.notice{
+    background: #000;
+  }
+  #notification > span{
+    margin: 0;
+  }
+   #notification.active{
+     display: block;
+     opacity: .8;
+   }
+    #notification.darker{
+      opacity: 0;
+    }
