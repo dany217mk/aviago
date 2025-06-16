@@ -48,6 +48,10 @@ class Helper{
         return $token;
     }
 
+    public function generationRequestCode(){
+      
+    }
+
     public function checkImg($val)
         {
           $bool = true;

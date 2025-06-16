@@ -39,4 +39,12 @@ class Airline extends Model
         $data = $this->returnAssoc($query, ['user_id' => $user_id]);
         return $data;
     }
+
+    public function getAll()
+    {
+        $query = "SELECT * FROM airline";
+        $data = $this->returnAllAssoc($query);
+
+        return $data;
+    }
 }

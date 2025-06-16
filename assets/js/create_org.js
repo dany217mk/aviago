@@ -1,6 +1,6 @@
 const countrySelect = document.getElementById('countrySelect');
 
-fetch('https://restcountries.com/v3.1/all')
+fetch('https://restcountries.com/v3.1/all?fields=name,cca2')
   .then(res => res.json())
   .then(countries => {
     // Сортируем по имени
@@ -17,7 +17,7 @@ fetch('https://restcountries.com/v3.1/all')
   })
   .catch(err => {
     console.error('Ошибка загрузки стран:', err);
-    countrySelect.innerHTML = '<option disabled>Ошибка загрузки</option>';
+    countrySelect.innerHTML = '<option selected value="RU">Россия</option><option disabled>Ошибка загрузки</option>';
   });
 
 

@@ -28,7 +28,7 @@ const emailCheck = /^[a-z0-9_.-]+@([a-z0-9-]+\.)+[a-z]{2,6}$/i;
 const passwordCheck = /^[a-zA-Z0-9_\-\$]{5,20}$/;
 const name_surname_patronymic_check = /^([а-яА-ЯЁёa-zA-Z\-]+)$/u;
 const passport_check = /^\d{4}\s?\d{6}$/;
-const datePattern = /^(0[1-9]|[12][0-9]|3[01])\.(0[1-9]|1[0-2])\.\d{4}$/;
+const datePattern = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/;
 
 let current = 1;
 
@@ -184,8 +184,8 @@ function isValidDate(day, month, year) {
 birthdateInput.onfocus = () => birthdateInput.classList.remove("errorInput");
 
 birthdateInput.onblur = () => {
-  const value = birthdateInput.value.trim();
-  const [day, month, year] = value.split('.').map(Number);
+  const value = birthdateInput.value.trim();  
+  const [year, month, day] = value.split('-').map(Number);
 
   if (!(datePattern.test(value) && isValidDate(day, month, year))) {
     birthdateInput.classList.add("errorInput");
@@ -195,27 +195,6 @@ birthdateInput.onblur = () => {
 
 
 birthdateInput.addEventListener('input', (e) => {
-  let value = e.target.value.replace(/\D/g, '');
-  if (value.length > 8) value = value.slice(0, 8);
-
-  const previousValue = e.target.dataset.previousValue || '';
-  const currentValue = e.target.value;
-  if (previousValue.length >= currentValue.length && currentValue.length < 10) {
-    e.target.value = '';
-    e.target.dataset.previousValue = '';
-    checkPasportBlockReg();
-    return false;
-  }
-  let formatted = '';
-  for (let i = 0; i < value.length; i++) {
-    formatted += value[i];
-    if (i === 1 || i === 3) {
-      formatted += '.';
-    }
-  }
-
-  e.target.value = formatted;
-  e.target.dataset.previousValue = currentValue;
   checkPasportBlockReg();
 });
 
@@ -228,7 +207,7 @@ gender.onchange = checkPasportBlockReg;
 
 // Блокировка кнопок при неправильных данных
 function checkPasportBlockReg() {
-  const [day, month, year] = birthdateInput.value.split('.').map(Number);
+  const [year, month, day] = birthdateInput.value.split('-').map(Number);
   nextBtnThird.disabled = !(passport_check.test(passportInput.value) &&
     datePattern.test(birthdateInput.value) && isValidDate(day, month, year) &&
     gender.value !== '-');

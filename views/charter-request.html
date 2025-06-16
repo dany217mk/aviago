@@ -1,6 +1,148 @@
 <main>
     <div>
-        <h1>Создать заявку на чартерный рейс</h1>
+        <div class="main-container">
+        <h1>Заявка на чартерные перевозки</h1>
+        <a href="./charter_check" class="link_under_title">Проверить статус моей заявки</a>
         
+        <form id="charter_form" method="post">
+            <div class="form-section">
+                <h2 class="form-section-title">Рейс</h2>
+                <div class="form-grid">
+                    <div class="form-row">
+                        <label for="departure-city" class="required">Город отправления</label>
+                        <select name="departure" id="select_from" class="operator">
+                            <option value="0">Откуда</option>
+                            <?php foreach ($airports as $airport): ?>
+                                <option value="<?= $airport['id']; ?>">
+                                    <?= htmlspecialchars($airport['city'] . " " . $airport['iata']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <span class="input-error" id="errorDeparture">Выберите город отправления</span>
+                    </div>
+                    
+                    <div class="form-row">
+                        <label for="passengers-count" class="required">Количество пассажиров</label>
+                        <input type="number" name="passengers-count" id="passengers-count" class="charter_input">
+                        <span class="input-error" id="errorPassengersCount">Количество пассажиров должно быть от 1 до 853</span>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="arrival-city" class="required">Город прибытия</label>
+                        <select name="arrival" id="select_to" class="operator">
+                            <option value="0">Куда</option>
+                            <?php foreach ($airports as $airport): ?>
+                                <option value="<?= $airport['id']; ?>">
+                                    <?= htmlspecialchars($airport['city'] . " " . $airport['iata']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <span class="input-error" id="errorArrival">Выберите город прибытия</span>
+                    </div>
+                    
+                    <div class="form-row">
+                        <label for="flight-date" class="required">Дата рейса</label>
+                        <input type="date" name="flight-date" id="flight-date" class="charter_input">
+                        <span class="input-error" id="errorFlightDate">Некорректная дата. Проверьте день и месяц</span>
+                    </div>
+
+                    <div class="checkbox-container">
+                        <input type="checkbox" name="allow_other_psng" checked id="open">
+                        <label for="open" class="checkbox_label">Открыть продажу билетов для других пассажиров <a href="./report/501">(это выгодно)</a></label>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="airline">Авиакомпания</label>
+                        <select name="airline" id="airline" class="operator">
+                            <option value="null">Любая</option>
+                            <?php foreach ($airlines as $airline): ?>
+                                <option value="<?= $airline['id']; ?>">
+                                    <?= htmlspecialchars($airline['name'] . " " . $airline['iata']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    
+                </div>
+            </div>
+
+            
+            
+            <? if (!isset($_COOKIE['uid'])): ?>
+            <div id="contact-data" class="form-section">
+                <h2>Контактные данные</h2>
+                <a href="<?= FULL_SITE_ROOT; ?>/auth" class="cta">
+                    (Войдите в аккаунт – и мы возьмём ваши данные из личного кабинета)
+                </a>
+
+                <div class="form-grid">
+                    <div class="form-row">
+                        <label for="contact-name" class="required">ФИО контактного лица</label>
+                        <input type="text" name="contact-fio" id="contact-fio">
+                        <span class="input-error" id="errorContactFio">Неверный формат</span>
+                    </div>
+                    
+                    <div class="form-row">
+                        <label for="email" class="required">Электронный адрес</label>
+                        <input type="email" name="email" id="email">
+                        <span class="input-error" id="errorEmail">Неверный формат</span>
+                    </div>
+                    
+                    <div class="form-row">
+                        <label for="organization">Название организации</label>
+                        <input type="text" id="org" name="organization">
+                        <span class="input-error" id="errorOrg">Название авиакомпании не соответствует формату. <br> Название должно быть менее 20 символов</span>
+                    </div>
+                    <div class="form-row">
+                     <label for="additional-info">Дополнительная информация</label>
+                     <textarea id="additional-info" name="additional-info" rows="4"></textarea>
+                     <span class="input-error" id="errorAddInfo">Неверный формат. Информация должна быть менее 500 символов</span>
+                    </div>
+                </div>
+                
+                
+            </div>
+
+            <? else: ?>
+                <p>Контактные данные для связи были автоматически взяты из вашего <a href="<?= FULL_SITE_ROOT; ?>/profile">аккаунта</a></p>
+            <? endif; ?>
+            
+            <div class="checkbox-container">
+                <input type="checkbox" id="agree">
+                <label for="agree" class="checkbox_label">Подтверждаю согласие с <a href="./report/403">Политикой обработки персональных данных.</a></label>
+            </div>
+            
+            <div class="divider"></div>
+            <div class="btn-block">
+                <button type="submit" disabled id="submit-btn-charter" name="submit-btn-charter" class="submit-btn">Отправить заявку</button>
+            </div>
+        </form>
+    </div>
     </div>
 </main>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+<script>
+
+    
+    let reg = <?= isset($_COOKIE['uid']) ? 'true' : 'false'; ?>;
+    
+    document.addEventListener('DOMContentLoaded', function() {
+    const selectElement = document.getElementById('select_from');
+    if (selectElement) {
+        $(selectElement).select2();
+    }
+    const selectElement2 = document.getElementById('select_to');
+    if (selectElement2) {
+        $(selectElement2).select2();
+    }
+    const selectElement3 = document.getElementById('airline');
+    if (selectElement3) {
+        $(selectElement3).select2();
+    }
+});
+</script>
