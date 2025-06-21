@@ -5,29 +5,14 @@
         </div>
 
         <div class="home-nav">
-            <a href="<?= FULL_SITE_ROOT; ?>/home" class="active">Открытые чартеры</a>
-            <a href="<?= FULL_SITE_ROOT; ?>/charter_number">Частные чартеры (по коду)</a>
+            <a href="<?= FULL_SITE_ROOT; ?>">Открытые чартеры</a>
+            <a href="<?= FULL_SITE_ROOT; ?>/charter_number" class="active">Частные чартеры (по коду)</a>
         </div>
-         <form class="flight_info_board" id="flights_form" method="post">
-            <select name="departure" id="select_from" class="operator">
-                <option value="0">Откуда</option>
-                <?php foreach ($airports as $airport): ?>
-                    <option value="<?= $airport['id']; ?>"
-                        <?= (isset($_POST['departure']) && $_POST['departure'] == $airport['id']) ? 'selected' : ''; ?>>
-                        <?= htmlspecialchars($airport['city'] . " " . $airport['iata']); ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-            <select name="arrival" id="select_to" class="operator">
-                <option value="0">Куда</option>
-                <?php foreach ($airports as $airport): ?>
-                    <option value="<?= $airport['id']; ?>"
-                        <?= (isset($_POST['arrival']) && $_POST['arrival'] == $airport['id']) ? 'selected' : ''; ?>>
-                        <?= htmlspecialchars($airport['city'] . " " . $airport['iata']); ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-            <select name="date" class="bg-fff">
+
+        <form class="flight_info_board" id="flights_form" method="post">
+            <input type="text" placeholder="Код рейса" name="flight_code"
+                value="<?= isset($_POST['flight_code']) ? htmlspecialchars($_POST['flight_code']) : '' ?>">
+            <select name="date">
                 <option value="2000-01-01">Дата вылета</option>
                 <?php foreach ($dates as $date): ?>
                     <option value="<?= $date[0]; ?>"
@@ -36,7 +21,7 @@
                     </option>
                 <?php endforeach; ?>
             </select>
-            <select name="passenger_counts" id="passengers_counts" class="bg-fff">
+            <select name="passenger_counts" id="passengers_counts">
                 <option value="0" disabled selected>Число пассажиров</option>
                 <? for($i=1; $i<10; $i++): ?>
                     <option value="<?=$i;?>"
@@ -46,6 +31,9 @@
             </select>
             <input type="submit" value="Найти рейсы">
         </form>
+
+
+
 
         <? if (isset($data) && $data): ?>
         <table class="table table_flight_board">
@@ -59,7 +47,7 @@
             <tbody>
                 <?php $counter=0; ?>
                 <?php foreach ($data as $item) : ?>
-                <? if ($item['available_for_individuals'] > 0): ?>
+                <? if ($item['charter_available'] > 0): ?>
                  <? $counter++; ?>
                     <tr>
                         <td><img src="<?= AIRLINE_IMG . '/' . $item['airline_logo']; ?>" alt="logo" width="30"> <?= $item['airline_name']; ?></td>
@@ -70,13 +58,15 @@
                         <td><?=$item['arr_time']?></td>
                         <td>
                         <form action="book_flight/<?= $item['flight_number']; ?>" method="post">
-                        <? if ($item['available_for_individuals'] >= $requestedSeats): ?>
+                        <? if ($item['charter_available'] >= $requestedSeats): ?>
                             <input type="submit" class="btn_as_link" name="book_flight_btn" value="Купить билет">
                             <input type="hidden" name="book_passenger_counts" value="<?= $requestedSeats; ?>">
-                        <? elseif ($item['available_for_individuals'] > 0): ?>
+                            <input type="hidden" name="book_charter_request_id" value="<?= $item['charter_request_id']; ?>">
+                        <? elseif ($item['charter_available'] > 0): ?>
                             <span>Осталось только <?= $item['available_for_individuals']; ?> билет(а)</span><br>
                             <input type="submit" class="btn_as_link" name="book_flight_btn" value="Купить <?= $item['available_for_individuals']; ?> билет(а)">
                             <input type="hidden" name="book_passenger_counts" value="<?= $item['available_for_individuals']; ?>">
+                            <input type="hidden" name="book_charter_request_id" value="<?= $item['charter_request_id']; ?>">
                         <? endif; ?>
                         </form>
                         </td>
@@ -93,22 +83,8 @@
         <? elseif (isset($data) && !$data): ?>
             <p class="nothing">Ничего не найдено</p>
         <? endif; ?>
+
+       
     </div>
 </main>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-    const selectElement = document.getElementById('select_from');
-    if (selectElement) {
-        $(selectElement).select2();
-    }
-    const selectElement2 = document.getElementById('select_to');
-    if (selectElement2) {
-        $(selectElement2).select2();
-    }
-});
-</script>

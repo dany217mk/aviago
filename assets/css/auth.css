@@ -167,20 +167,20 @@
     top: 20px;
     left: 20px;
     padding: 4px;
+    display: flex;
+    align-items: center;
     transition: all 0.4s ease;
   }
   body > main > a span{
       font-size: 30px;
       font-weight: 500;
       color: #434343;
-      font-family: 'BaronNeue';
       margin-left: 10px;
-      text-shadow: 0 0 4px #ffffff;
       text-decoration: none;
   }
   body > main > a img{
-   width: 30px;
-   height: 30px;
+   width: 50px;
+   height: 50px;
   }
   .btns-act{
     margin-top: 40px;

@@ -1,0 +1,25 @@
+.home-nav{
+    margin-bottom: 15px;
+    display: flex;
+    gap: 30px;
+}
+.home-nav a{
+    padding-bottom: 4px;
+    font-size: 18px;
+    color: #434343;
+}
+.home-nav a.active{
+    border-bottom: 4px solid var(--main);
+}
+#passengers_counts.empty{
+    border-color: red;
+}
+
+.table_flight_board, .nothing {
+    margin-top: 20px;
+}
+.table_flight_board tr td:first-child{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}

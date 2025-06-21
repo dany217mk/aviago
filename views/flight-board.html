@@ -55,9 +55,15 @@
             </thead>
             <tbody>
                 <?php foreach ($data as $item) : ?>
+                <?php $counter=0; ?>
                     <tr>
                         <?php foreach ($item as $value) : ?>
+                        <? if ($counter==7): ?>
+                            <td><a href="./flight/<?= $value; ?>">Купить билет</a></td>
+                        <? else: ?>
                             <td><?= htmlspecialchars($value); ?></td>
+                        <?php $counter++; ?>
+                        <? endif; ?>
                         <?php endforeach; ?>
                     </tr>
                 <?php endforeach; ?>
