@@ -43,6 +43,13 @@ class User extends Model
       return $this->returnAssoc($query, $params);
     }
 
+    public function getUserInfoById($user_id){
+      $query = "SELECT passport_series_number, date_of_birth, gender  FROM user_passenger
+       WHERE user_passenger.user_id = :user_id";
+       $params = ['user_id' => $user_id ];
+      return $this->returnAssoc($query, $params);
+    }
+
     public function checkIfUserExistAuth($email, $password='NONE'){
         $query = "SELECT id, password FROM user_account WHERE email = :email";
         $params = ['email' => $email];

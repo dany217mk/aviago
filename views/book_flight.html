@@ -1,0 +1,34 @@
+<main>
+    <div>
+        <div class="title">
+        <h1>Покупка авиабилета на рейс <?= $flight['flight_number']; ?></h1> 
+        <span><?= $flight['dep_airport']; ?> -> <?= $flight['arr_airport']; ?>, вылет <?= $flight['dep_time']; ?></span>
+        </div>
+
+        <form method="post" class="book_flight_form">
+            <div>
+                <h3>Пассажир 1:</h3>
+               <input type="text" name="book_name1" value="<?= isset($user['name']) ? htmlspecialchars($user['name']) : '' ?>" class="book_name" placeholder="Имя">
+                <input type="text" name="book_surname1" value="<?= isset($user['surname']) ? htmlspecialchars($user['surname']) : '' ?>" class="book_surname" placeholder="Фамилия">
+                <input type="text" name="book_patronymic1" value="<?= isset($user['patronymic']) ? htmlspecialchars($user['patronymic']) : '' ?>" class="book_patronymic" placeholder="Отчество">
+                <input type="text" name="book_passport1" value="<?= isset($userInfo['passport_series_number']) ? htmlspecialchars($userInfo['passport_series_number']) : '' ?>" class="book_passport" placeholder="Серия и номер паспорта">
+            </div>
+            
+            <? for($i=1; $i<$book_passenger_counts; $i++): ?>
+                <div>
+                    <h3>Пассажир <?= $i+1; ?>:</h3>
+                    <input type="text" name="book_name<?= $i+1; ?>" class="book_name" placeholder="Имя">
+                    <input type="text" name="book_surname<?= $i+1; ?>" class="book_surname" placeholder="Фамилия">
+                    <input type="text" name="book_patronymic<?= $i+1; ?>" class="book_patronymic" placeholder="Отчество">
+                    <input type="text" name="book_passport<?= $i+1; ?>" class="book_passport" placeholder="Серия и номер паспорта">
+                </div>
+            <? endfor; ?>
+
+            <? if (isset($book_charter_request_id)): ?>
+                <input type="hidden" name="charter_request_id" value="<?= $book_charter_request_id; ?>">
+            <? endif; ?>
+        
+           <div><input type="email" name="book_email" class="book_email" value="<?= isset($user['email']) ? htmlspecialchars($user['email']) : '' ?>" placeholder="Email:"> <input type="submit" id="book_buy" value="Купить"></div>
+        </form>
+    </div>
+</main>

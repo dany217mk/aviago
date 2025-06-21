@@ -163,19 +163,18 @@ input[type=radio] + label {
   justify-content: space-between;
 }
 .header__logo{
-  width: 60px;
+  width: 50px;
 }
 .header__item{
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  gap: 5px;
   text-decoration: none;
 }
 .header__title{
   font-size: 28px;
   font-weight: 500;
-  font-family: 'BaronNeue';
   color: #ffffff;
   margin-left: 10px;
 }
@@ -213,6 +212,7 @@ input[type=radio] + label {
 }
 main{
   margin-top: 40px;
+  margin-bottom: 40px;
 }
 main > div{
   width: 1440px;
@@ -376,3 +376,21 @@ main > div{
     #notification.darker{
       opacity: 0;
     }
+
+input[type="submit"].btn_as_link{
+  border-color: transparent;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  color: #007bff;
+  text-decoration: none;
+  outline: none;
+}
+input[type="submit"].btn_as_link:hover{
+  background: transparent;
+  color: #007bff;
+}
+input[type="submit"].btn_as_link:focus {
+  outline: none;
+  box-shadow: none;
+}

@@ -1,0 +1,14 @@
+.check_in_form.found{
+    display: none;
+}
+.text-info{
+    margin-top: 20px;
+    display: block;
+}
+.check_in_seats_form{
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+    gap: 20px;
+    margin-top: 20px;
+}

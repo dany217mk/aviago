@@ -15,18 +15,134 @@ class MainController
       header("Location: " . SITE_PAGE_NOT_FOUND);
       die();
     }
-    $scripts = [];
-    $styles = [];
+    $scripts = ['flights.js', 'notification.js'];
+    $styles = [CSS . '/home.css'];
+    $title  = SITE_NAME;
+    $menu_active = 'home';
+
+
+    $flightModel = new Flight();
+
+    if (isset($_POST['departure'])){
+      $dep = $_POST['departure'];
+      $arr = $_POST['arrival'];
+      $date = $_POST['date'];
+      $requestedSeats = $_POST['passenger_counts'];
+      $data = $flightModel->getFlightsWithSeats($dep, $arr, $date, $requestedSeats);
+      $columns = ['Авиакомпания', 'Отправление', 'Прибытие', 'Самолет', 'Время вылета', 'Время прилёта', 'Билеты'];
+    }
+
+
+    $airportModel = new Airport();
+    $airports = $airportModel->getAll();
+
+    setlocale(LC_TIME, 'ru_RU.UTF-8'); 
+    $dates = [];
+    $startDate = new DateTime('today');
+
+    for ($i = 0; $i <= 61; $i++) {
+        $isoFormat = $startDate->format('Y-m-d'); 
+        $prettyFormat = strftime('%e %B %Y', $startDate->getTimestamp()); 
+        $prettyFormat = mb_convert_case(trim($prettyFormat), MB_CASE_TITLE, "UTF-8"); 
+
+        $dates[] = [$isoFormat, $prettyFormat];
+        $startDate->modify('+1 day');
+    }
+
+    $this->helper->outputCommonHead($title, $menu_active, $styles);
+    require_once  './views/home.html';
+    $this->helper->outputCommonFoot($scripts);
+  }
+
+
+  public function actionBookFlight($data){
+    $flight_code = $data[0];
+
+    $flightModel = new Flight();
+
+    $flight = $flightModel->getFlightByNumber($flight_code);
+
+    if (!$flight){
+      header("Location: " . FULL_SITE_ROOT . "/report/527");
+      exit;
+    }
+    $menu_active = '';
+
+    if (isset($_POST['book_name1'])) {
+      $flight_id = $flight['id'];
+      $flightModel = new Flight();
+      if (isset($_POST['charter_request_id'])){
+        $charterRequestId = $_POST['charter_request_id'];
+      } else{
+        $charterRequestId = null;
+      }
+      $booking_number = $flightModel->bookFlightPassengers($flight_id, $_POST, $charterRequestId);
+
+      setcookie('booking_number', $booking_number, time() + 1000, '/');
+      header("Location: " . FULL_SITE_ROOT . "/report/986");
+      exit;
+  }
+    
+
+    if (isset($_COOKIE['uid'])){
+      $user = $this->userModel->getUser();
+      if ($user['access_level'] == 5){
+        $userInfo = $this->userModel->getUserInfoById($user['id']);
+      }
+    }
+
+    if (isset($_POST['book_flight_btn'])){
+      $book_passenger_counts = $_POST['book_passenger_counts'];
+      if (isset($_POST['book_charter_request_id'])){
+        $book_charter_request_id = $_POST['book_charter_request_id'];
+      }
+    } else{
+      header("Location: " . FULL_SITE_ROOT . "/report/404");
+      exit;
+    }
+
+    $scripts = ['book_flight.js', 'notification.js'];
+    $styles = [CSS . '/book_flight.css'];
+    $title  = $flight['flight_number'];
+
+
+    $this->helper->outputCommonHead($title, $menu_active, $styles);
+    require_once  './views/book_flight.html';
+    $this->helper->outputCommonFoot($scripts);
+  }
+
+  public function actionCharterNumber(){
+    $scripts = ['flights.js', 'notification.js'];
+    $styles = [CSS . '/home.css'];
     $title  = SITE_NAME;
     $menu_active = 'home';
 
     $flightModel = new Flight();
-    $response = $flightModel->getAll();
-    $data = $response['data'];
-    $columns = $response['columns'];
+        
+    if (isset($_POST['flight_code'])){
+      $flight_code = $_POST['flight_code'];
+      $date = $_POST['date'];
+      $requestedSeats = $_POST['passenger_counts'];
+      $data = $flightModel->getFlightsByCode($flight_code, $date, $requestedSeats);
+      $columns = ['Авиакомпания', 'Отправление', 'Прибытие', 'Самолет', 'Время вылета', 'Время прилёта', 'Билеты'];
+    }
+
+
+    setlocale(LC_TIME, 'ru_RU.UTF-8'); 
+    $dates = [];
+    $startDate = new DateTime('today');
+
+    for ($i = 0; $i <= 61; $i++) {
+        $isoFormat = $startDate->format('Y-m-d'); 
+        $prettyFormat = strftime('%e %B %Y', $startDate->getTimestamp()); 
+        $prettyFormat = mb_convert_case(trim($prettyFormat), MB_CASE_TITLE, "UTF-8"); 
+
+        $dates[] = [$isoFormat, $prettyFormat];
+        $startDate->modify('+1 day');
+    }
 
     $this->helper->outputCommonHead($title, $menu_active, $styles);
-    require_once  './views/home.html';
+    require_once  './views/charter-number.html';
     $this->helper->outputCommonFoot($scripts);
   }
 
@@ -37,6 +153,10 @@ class MainController
     if (isset($_COOKIE['charter_code'])){
       $charter_code = $_COOKIE['charter_code'];
       unset($_COOKIE['charter_code']);
+    }
+    if (isset($_COOKIE['booking_number'])){
+      $booking_number = $_COOKIE['booking_number'];
+      unset($_COOKIE['booking_number']);
     }
     $this->helper->outputCommonHead($title, '', $styles);
     require_once  './views/report.html';
@@ -97,9 +217,6 @@ public function actionCharterCheck() {
       header("Location: ./report/999");
       exit;
     }
-
-
-
     $title = "Заявка на чартер";
     $styles = [CSS . '/charter.css'];
     $scripts = ['charter.js', 'notification.js'];
@@ -118,14 +235,36 @@ public function actionCharterCheck() {
 
   public function actionCheckIn(){
     $title = "Онлайн регистрация";
-    $styles = [];
-    $scripts = [];
+    $styles = [CSS . '/check-in.css'];
+    $scripts = ['check_in.js', 'notification.js'];
 
-    $flightModel = new Flight();
-    $response = $flightModel->getAll();
-    $data = $response['data'];
-    $columns = $response['columns'];
+    $bookingModel = new Booking();
+    
     $menu_active = 'check_in';
+
+
+    if (isset($_POST['booking_number'])){
+
+      $data = $bookingModel->getBookingByNumberAndEmail($_POST['reg_email'], $_POST['booking_number']);
+
+      if ($data){
+        $dep_time = new DateTime($data[0]['dep_time']);
+        $now = new DateTime();
+        $interval = $now->diff($dep_time);
+        $hours_to_departure = ($dep_time->getTimestamp() - $now->getTimestamp()) / 3600;
+        $seats = $bookingModel->getAvailableSeats($data[0]['flight_id']);
+      }
+    }
+
+    if (isset($_POST['check_in_seat0'])){
+      $success = $bookingModel->checkInPassengers($_POST['booking_id'], $_POST);
+      if ($success) {
+          header("Location: " . FULL_SITE_ROOT . "/report/976");
+          exit;
+      } else {
+          echo "<script>alert('Произошла ошибка при регистрации.');</script>";
+      }
+    }
 
     $this->helper->outputCommonHead($title, $menu_active, $styles);
     require_once   './views/common/nav.html';
