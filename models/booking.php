@@ -1,24 +1,100 @@
 <?php
 class Booking extends Model
 {
-    public function getBookingByNumberAndEmail($email, $number){
-        $query = "SELECT booking.id, dep.name as dep_airport, arr.name as arr_airport, airline.name as airline_name,
-        flight.dep_time, pd.name, pd.surname, pd.patronymic, flight.id as flight_id, bp.id as booking_passenger_id, booking.status
-         FROM booking
-         JOIN flight ON booking.flight_id = flight.id
-         JOIN airport dep ON flight.dep_airport_id = dep.id
-         JOIN airport arr ON flight.arr_airport_id = arr.id
-         JOIN airplane_airline ON flight.airplane_airline_id = airplane_airline.id
-         JOIN airline ON airline.id = airplane_airline.airline_id
-         JOIN booking_passenger bp ON booking.id = bp.booking_id
-         JOIN passenger_details pd ON bp.passenger_id = pd.id
-         WHERE booking.passenger_email = :email AND booking.booking_number = :number ORDER BY pd.surname, pd.name";
-         $data = $this->returnAllfetchAssoc($query, [
-                'email' => $email,
-                'number' => $number
-            ]);
-        return $data;
+    public function getBookingInfoByNumberAndEmail(string $email, string $number)
+    {
+        $query = "
+            SELECT booking.id, booking.status, booking.passenger_email,
+                   flight.id as flight_id, flight.dep_time,
+                   dep.name as dep_airport, arr.name as arr_airport,
+                   airline.name as airline_name
+            FROM booking
+            JOIN flight ON booking.flight_id = flight.id
+            JOIN airport dep ON flight.dep_airport_id = dep.id
+            JOIN airport arr ON flight.arr_airport_id = arr.id
+            JOIN airplane_airline ON flight.airplane_airline_id = airplane_airline.id
+            JOIN airline ON airline.id = airplane_airline.airline_id
+            WHERE booking.passenger_email = :email AND booking.booking_number = :number
+            LIMIT 1
+        ";
+        return $this->returnAssoc($query, ['email' => $email, 'number' => $number]);
     }
+
+    public function getBookingInfoByNumber(string $number)
+    {
+        $query = "
+            SELECT booking.id, booking.booking_number, booking.status, booking.passenger_email,
+                   flight.id as flight_id, flight.dep_time, flight.arr_time, flight.flight_number,
+                   dep.name as dep_airport, arr.name as arr_airport,
+                   airline.name as airline_name
+            FROM booking
+            JOIN flight ON booking.flight_id = flight.id
+            JOIN airport dep ON flight.dep_airport_id = dep.id
+            JOIN airport arr ON flight.arr_airport_id = arr.id
+            JOIN airplane_airline ON flight.airplane_airline_id = airplane_airline.id
+            JOIN airline ON airline.id = airplane_airline.airline_id
+            WHERE booking.booking_number = :number
+            LIMIT 1
+        ";
+        return $this->returnAssoc($query, ['number' => $number]);
+    }
+
+    public function getPassengersByBookingId(int $booking_id)
+    {
+        $query = "
+            SELECT 
+                pd.id, 
+                pd.name, 
+                pd.surname, 
+                pd.patronymic, 
+                pd.passport_series_number,
+                bp.id AS booking_passenger_id,
+                s.number AS seat_number
+            FROM booking_passenger bp
+            JOIN passenger_details pd ON bp.passenger_id = pd.id
+            LEFT JOIN seat s ON bp.seat_id = s.id
+            WHERE bp.booking_id = :booking_id
+            ORDER BY pd.surname, pd.name
+        ";
+        return $this->returnAllfetchAssoc($query, ['booking_id' => $booking_id]);
+    }
+
+
+    public function getBookingData(string $email, string $number)
+    {
+        $bookingInfo = $this->getBookingInfoByNumberAndEmail($email, $number);
+
+        if (!$bookingInfo) {
+            return [
+                'booking' => null,
+                'passengers' => []
+            ];
+        }
+
+        $passengers = $this->getPassengersByBookingId((int)$bookingInfo['id']);
+
+        return [
+            'booking' => $bookingInfo,
+            'passengers' => $passengers
+        ];
+    }
+
+    public function getBookingDataByNumber($booking_number){
+        $bookingInfo = $this->getBookingInfoByNumber($booking_number);
+
+        if (!$bookingInfo) {
+            return [
+                'booking' => null,
+                'passengers' => []
+            ];
+        }
+        $passengers = $this->getPassengersByBookingId((int)$bookingInfo['id']);
+        return [
+            'booking' => $bookingInfo,
+            'passengers' => $passengers
+        ];
+    }
+
 
 
     public function getAvailableSeats($flight_id) {

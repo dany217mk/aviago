@@ -45,6 +45,7 @@ footer {
 
 .clm {
     width: 1200px;
+    overflow-x: scroll;
     margin-right: 0;
     margin-left: auto;
     padding: 20px;
@@ -78,4 +79,47 @@ footer {
 }
 .airline_name{
     margin-top: 20px;
+}
+
+
+.navi{
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 15px;
+}
+.link_add{
+  border: 2px solid #ccc;
+  padding: 1rem;
+  color: #434343;
+  text-decoration: none;
+  width: 200px;
+  display: block;
+  transition: all 0.3s ease;
+}
+.link_add:hover{
+    background: #ccc;
+}
+tbody td:last-child a{
+  border: 1px solid rgb(118, 118, 118);
+  text-align: center;
+  text-decoration: none;
+  background: rgb(239, 239, 239);
+  margin-left: 15px;
+  padding: 1px 6px;
+  display: block;
+}
+tbody td:last-child a:last-child{
+  color: red;
+}
+tbody td a.red{
+    color: red !important;
+}
+tbody td a.green{
+    color: green !important;
+}
+tbody td:last-child a:first-child{
+  color: green;
+  display: inline-block;
+  margin-bottom: 10px;
 }

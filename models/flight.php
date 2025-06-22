@@ -265,5 +265,67 @@ class Flight extends Model
         return ['data' => $data, 'columns' => $columns];
     }
 
+
+
+    public function getFlightCharterDataByCode(string $flight_code) {
+        $flightInfo = $this->getFlightInfoByCode($flight_code);
+        if (!$flightInfo) {
+            return [
+                'flight' => null,
+                'passengers' => []
+            ];
+        }
+        $passengers = $this->getPassengersByFlightCharterId((int)$flightInfo['charter_request_id']);
+        return [
+            'flight' => $flightInfo,
+            'passengers' => $passengers
+        ];
+    }
+
+    public function getFlightInfoByCode(string $flight_code) {
+        $query = "
+            SELECT 
+                f.id, f.flight_code, f.flight_number, f.dep_time, f.arr_time,
+                dep.name as dep_airport, arr.name as arr_airport,
+                airline.name as airline_name,
+                cr.user_id as charter_user_id,
+                cr.id as charter_request_id,
+                airplane.name as airplane_name   
+            FROM flight f
+            JOIN airport dep ON f.dep_airport_id = dep.id
+            JOIN airport arr ON f.arr_airport_id = arr.id
+            JOIN airplane_airline aa ON f.airplane_airline_id = aa.id
+            JOIN airplane ON airplane.id = aa.airplane_id  
+            JOIN airline ON airline.id = aa.airline_id
+            JOIN charter_request cr ON f.charter_request_id = cr.id
+            WHERE f.flight_code = :flight_code
+            LIMIT 1
+        ";
+        return $this->returnAssoc($query, ['flight_code' => $flight_code]);
+    }
+
+    public function getPassengersByFlightCharterId(int $charter_request_id) {
+        $query = "
+            SELECT
+                pd.id,
+                pd.name,
+                pd.surname,
+                pd.patronymic,
+                pd.passport_series_number,
+                bp.id AS booking_passenger_id,
+                s.number AS seat_number,
+                b.booking_number,
+                b.status,
+                b.passenger_email
+            FROM booking_passenger bp
+            JOIN passenger_details pd ON bp.passenger_id = pd.id
+            JOIN booking b ON bp.booking_id = b.id
+            LEFT JOIN seat s ON bp.seat_id = s.id
+            WHERE b.charter_request_id = :charter_request_id
+            ORDER BY pd.surname, pd.name
+        ";
+        return $this->returnAllfetchAssoc($query, ['charter_request_id' => $charter_request_id]);
+    }
+
     
 }

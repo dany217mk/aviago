@@ -61,11 +61,8 @@ class UserController extends Controller
             require_once   './views/common/footer.html';
             require_once   './views/common/foot.html';
         } 
-        
-        
-
-        
     }
+
 
 
     public function actionChangePassword(){

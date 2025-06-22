@@ -172,6 +172,9 @@ input[type=radio] + label {
   gap: 5px;
   text-decoration: none;
 }
+.header__item:last-child{
+  gap: 15px;
+}
 .header__title{
   font-size: 28px;
   font-weight: 500;

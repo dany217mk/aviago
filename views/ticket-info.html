@@ -1,0 +1,49 @@
+<main>
+    <div>
+        <h1>Бронирование <?= $bookingInfo['booking_number']; ?></h1>
+        <table class="info_table">
+        <tr>
+            <th>Почта:</th>
+            <td><?= $bookingInfo['passenger_email']; ?></td>
+        </tr>
+        <tr>
+            <th>Статус</th>
+            <td><?= $bookingInfo['status']; ?></td>
+        </tr>
+        <tr>
+            <th>Номер рейса:</th>
+            <td><?= $bookingInfo['flight_number']; ?></td>
+        </tr>
+        <tr>
+            <th>Вылет:</th>
+            <td><?= $bookingInfo['dep_airport']; ?> <?= $bookingInfo['dep_time']; ?></td>
+        </tr>
+        <tr>
+            <th>Прилет:</th>
+            <td><?= $bookingInfo['arr_airport']; ?> <?= $bookingInfo['arr_time']; ?></td>
+        </tr>
+        <tr>
+            <th>Авиакомпания:</th>
+            <td><?= $bookingInfo['airline_name']; ?></td>
+        </tr>
+    </table>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Пассажир</th>
+            <th>Паспортные данные</th>
+            <th>Место</th>
+        </tr>
+        </thead>
+        <tbody>
+        <? foreach($passengers as $passenger): ?>
+            <tr>
+                <td><?= $passenger['surname']; ?> <?= $passenger['name']; ?> <?= $passenger['patronymic']; ?></td>
+                <td><?= $passenger['passport_series_number']; ?></td>
+                <td><?= $passenger['seat_number']; ?></td>
+            </tr>
+        <? endforeach; ?>
+        </tbody>
+    </table>
+    </div>
+</main>

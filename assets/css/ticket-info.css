@@ -1,0 +1,20 @@
+.info_table {
+	margin-bottom: 20px;
+	border: 1px solid #dddddd;
+	border-collapse: collapse; 
+    width: 50%;
+    margin-top: 20px;
+}
+.info_table th {
+	font-weight: bold;
+	padding: 10px;
+    text-align: left;
+	border: 1px solid #dddddd;
+}
+.info_table td {
+	border: 1px solid #dddddd;
+	padding: 10px;
+}
+.table-title{
+    margin-bottom: 10px;
+}

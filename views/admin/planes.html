@@ -1,0 +1,36 @@
+<div class="clm">
+    <div class="navi">
+        <h2>Самолеты авиакомпании</h2>
+        <a href="<?= './' . $type . '/add'?>" class="link_add">Добавить</a>
+    </div>
+    <table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Название</th>
+            <th>Вместимость</th>
+            <th>Максимальная дальность полета</th>
+            <th>Регистрация</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        <? foreach($data as $item): ?>
+            <tr>
+                <td><?= $item['airplane_airline_id']; ?></td>
+                <td><?= $item['name']; ?></td>
+                <td><?= $item['capacity']; ?></td>
+                <td><?= $item['max_range_km']; ?></td>
+                <td><?= $item['registration']; ?></td>
+                <td>
+                    <a href="<?= $type . '/edit/' . $item['airplane_airline_id']; ?>" class="action-btn">Редактировать</a>
+                    <a href="<?= $type . '/delete/' . $item['airplane_airline_id']; ?>" class="action-btn">Удалить</a>
+                </td>
+            </tr>
+        <? endforeach; ?>
+    </tbody>
+    </table>
+     <? if (count($data) == 0): ?>
+        <i>У авиакомпании пока ни одного самолета :(</i>
+    <? endif; ?>
+</div>
