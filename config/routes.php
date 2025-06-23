@@ -8,10 +8,13 @@ $routes = array(
     'add_airline_to_charter_request/([0-9]+)' => 'addAirlineToCharter/$1',
     'flight_archive/([a-zA-Z0-9]+)' => 'flightArchive/$1',
     'airline_flight/([a-zA-Z0-9\-]+)' => 'airlineFlight/$1',
+    'flight_passengers/([a-zA-Z0-9]+)' => 'flightPassengers/$1',
   ),
   'CrewController' => array(
     'my_schedule' => 'mySchedule',
     'my_flight_history' => 'myFlightHistory',
+    'crew_flight/([a-zA-Z0-9]+)' => 'crewFlight/$1',
+    'crew_delete/([0-9]+)' => 'crewDelete/$1'
   ),
   'PlaneController' => array(
     'planes' => 'plane',

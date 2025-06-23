@@ -1,0 +1,70 @@
+<div class="clm">
+    <div class="navi">
+        <h2>Экипаж рейса</h2>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ФИО</th>
+                <th>Должность</th>
+                <th>Email</th>
+                <th>На этом рейсе</th>
+                <th>Действие</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($data as $item): ?>
+                <tr>
+                    <td><?= htmlspecialchars($item['surname'] . ' ' . $item['name'] . ' ' . $item['patronymic']); ?></td>
+                    <td><?= htmlspecialchars($item['position_details']); ?></td>
+                    <td><?= htmlspecialchars($item['email']); ?></td>
+                    <td><?= htmlspecialchars($item['description']); ?></td>
+                    <td><a href="<?= FULL_SITE_ROOT; ?>/crew_delete/<?= $item['crew_id']; ?>" class="red">Удалить</a></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+
+    <?php if (count($data) === 0): ?>
+        <i>На рейс пока не назначен ни один член экипажа :(</i>
+    <?php endif; ?>
+
+
+    <? if (in_array($this->user['role_id'], array(1, 2))): ?>
+    <h3 class="form-title">Добавить члена экипажа</h3>
+    <form method="POST" id="crew_form">
+        <div>
+            <label for="worker_id">Выберите сотрудника:</label><br>
+            <select name="worker_id" id="worker_id" required class="required">
+                <option value="">— Выберите —</option>
+                <?php foreach ($workers as $w): ?>
+                    <option value="<?= $w['id'] ?>">
+                        <?= htmlspecialchars($w['surname'] . ' ' . $w['name'] . ' ' . $w['patronymic']) ?> — <?= htmlspecialchars($w['role_name']) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div>
+            <label for="flight_role">Описание роли в полете:</label><br>
+            <input type="text" name="flight_role" id="flight_role" placeholder="например: КВС, safety pilot">
+        </div>
+
+        <input type="submit" value="Добавить в экипаж">
+    </form>
+    <? endif; ?>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+<script>
+    
+    document.addEventListener('DOMContentLoaded', function() {
+    const selectElement = document.getElementById('worker_id');
+    if (selectElement) {
+        $(selectElement).select2();
+    }
+});
+</script>

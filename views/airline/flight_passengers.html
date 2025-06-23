@@ -1,0 +1,39 @@
+<div class="clm">
+    <div class="navi">
+        <h2>Пассажиры рейса</h2>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ФИО</th>
+                <th>Паспорт</th>
+                <th>Email</th>
+                <th>Номер брони</th>
+                <th>Статус брони</th>
+                <th>Место</th>
+                <th>Класс</th>
+                <th>Аварийный выход</th>
+                <th>От чартера</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($data as $item): ?>
+                <tr>
+                    <td><?= htmlspecialchars($item['surname'] . ' ' . $item['name'] . ' ' . $item['patronymic']); ?></td>
+                    <td><?= htmlspecialchars($item['passport_series_number']); ?></td>
+                    <td><?= htmlspecialchars($item['passenger_email']); ?></td>
+                    <td><?= htmlspecialchars($item['booking_number']); ?></td>
+                    <td><?= htmlspecialchars($item['booking_status']); ?></td>
+                    <td><?= $item['seat_number'] ?? '<i>не назначено</i>'; ?></td>
+                    <td><?= $item['seat_type'] ?? '<i>—</i>'; ?></td>
+                    <td><?= isset($item['is_emergency_exit']) ? ($item['is_emergency_exit'] ? 'Да' : 'Нет') : '<i>—</i>'; ?></td>
+                    <td><?= !empty($item['charter_request_id']) ? 'Да' : 'Нет'; ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+
+    <?php if (count($data) === 0): ?>
+        <i>На рейс пока не зарегистрирован ни один пассажир :(</i>
+    <?php endif; ?>
+</div>

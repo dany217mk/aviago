@@ -212,6 +212,36 @@ class AirlineController extends Controller
         header("Location: " . FULL_SITE_ROOT . "/airline_flights");
     }
 
+    public function actionFlightPassengers($data){
+        $flight_code = $data[0];
+
+        if (!$this->userModel->isAuth()) {
+            header("Location: ./");
+        }
+        if (in_array($this->user['role_id'], array(1))){
+          $airline = $this->userModel->getUserAirline($this->user['id']);
+        } elseif (in_array($this->user['role_id'], array(2, 5, 6))){
+          $airline = $this->userModel->getAirlineByWorker($this->user['id']);
+        }
+
+         $title =  'Пассажиры рейса';
+         $scripts = [];
+         $styles = [CSS . '/profile.css', CSS . '/workers.css'];
+         $menu = $this->helper->getMenu($this->user['access_level']);
+
+        $flightModel = new Flight();
+
+        $data = $flightModel->getAllFlightPassengers($flight_code);
+
+        $this->helper->outputCommonHead($title, '', $styles);
+
+        echo "<div class='main-block'>";
+        require_once  './views/common/menu.html';
+        require_once  './views/airline/flight_passengers.html';
+        echo "</div>";
+        $this->helper->outputCommonFoot($scripts);
+    }
+
 
 
     public function actionAirlineFlight($data) {

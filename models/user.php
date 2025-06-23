@@ -10,7 +10,7 @@ class User extends Model
             if ($res->rowCount() > 0){
                 if (time() > $_COOKIE['tt']){
                     $token = $this->helper->generationToken();
-                    $timeToken = time() + 1800;
+                    $timeToken = time() + 2*24*3600;
                     $query = "UPDATE connect SET token = :new_token, time = TO_TIMESTAMP(:timeToken) WHERE user_id = :user_id and token = :token;";
                     $params = ['user_id' => $_COOKIE['uid'], 'token' => $_COOKIE['t'], 'new_token' => $token, 'timeToken' => $timeToken];
                     $this->actionQuery($query, $params);

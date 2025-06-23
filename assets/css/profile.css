@@ -119,6 +119,14 @@ tbody td a.red{
 tbody td a.green{
     color: green !important;
 }
+tbody td a.yellow{
+    color: #d1d103 !important;
+    margin-bottom: 10px;
+}
+tbody td a.blue{
+    color: blue !important;
+    margin-bottom: 10px;
+}
 tbody td a.usual{
     border: none !important;
     background: transparent !important;
@@ -130,10 +138,13 @@ tbody td:last-child a:first-child{
   margin-bottom: 10px;
 }
 
-#charter_decision_form{
+#charter_decision_form, #crew_form{
     display: flex;
     flex-direction: column;
     align-items: baseline;
     gap: 20px;
     margin-top: 10px;
+}
+.form-title{
+    margin-top: 20px;
 }

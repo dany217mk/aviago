@@ -48,6 +48,8 @@
                     </td>
                     <td>
                         <a href="<?= FULL_SITE_ROOT; ?>/airline_flight/<?= urlencode($item['request_code']) ?>" class="action-btn green">Открыть</a>
+                        <a href="<?= FULL_SITE_ROOT; ?>/flight_passengers/<?= urlencode($item['flight_code']) ?>" class="action-btn blue">Пассажиры</a>
+                        <a href="<?= FULL_SITE_ROOT; ?>/crew_flight/<?= urlencode($item['flight_code']) ?>" class="action-btn yellow">Экипаж</a>
                         <a href="./flight_archive/<?= urlencode($item['flight_code']) ?>" class="action-btn red">Архирвировать</a>
                     </td>
                 </tr>

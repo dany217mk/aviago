@@ -468,5 +468,31 @@ class Flight extends Model
         $this->actionQuery($query, $params);
     }
 
-    
+
+    public function getAllFlightPassengers(string $flight_code): array
+    {
+        $query = "
+            SELECT 
+                pd.id AS passenger_id,
+                pd.name,
+                pd.surname,
+                pd.patronymic,
+                pd.passport_series_number,
+                b.booking_number,
+                b.passenger_email,
+                b.status AS booking_status,
+                b.charter_request_id,
+                s.number AS seat_number,
+                s.type AS seat_type,
+                s.is_emergency_exit
+            FROM flight f
+            INNER JOIN booking b ON f.id = b.flight_id
+            INNER JOIN booking_passenger bp ON b.id = bp.booking_id
+            INNER JOIN passenger_details pd ON bp.passenger_id = pd.id
+            LEFT JOIN seat s ON bp.seat_id = s.id
+            WHERE f.flight_code = :flight_code
+        ";
+
+        return $this->returnAllfetchAssoc($query, [':flight_code' => $flight_code]);
+    }    
 }
