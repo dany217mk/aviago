@@ -66,7 +66,7 @@ class Crew extends Model
     }
 
     public function deleteById($crew_id) {
-        $query = "DELETE FROM crew WHERE id = :crew_id";
+        $query = "CALL delete_crew_member(:crew_id)";
         $params = [':crew_id' => $crew_id];
         $this->actionQuery($query, $params);
     }
