@@ -71,26 +71,24 @@ class Worker extends Model
     }
 
     public function edit($name, $surname, $patronymic, $date, $role, $position_details, $email, $user_id, $id){
-        $query = "UPDATE user_account  SET name = :name, surname = :surname
-         , patronymic = :patronymic, role_id = :role_id, email = :email
-          WHERE id = :user_id;";
-          $params = [
-                ':name' => $name,
-                ':surname' => $surname,
-                ':patronymic' => $patronymic,
-                ':role_id' => $role,
-                ':email' => $email,
-                ':user_id' => $user_id,
-          ];
-          $this->actionQuery($query, $params);
-          $query2 = "UPDATE worker_details  SET hired_at = :hired_at, position_details = :position_details
-          WHERE id = :worker_id;";
-          $this->actionQuery($query2, [':hired_at' => $date, ':position_details' => $position_details, ':worker_id' => $id]);
+        $query = "CALL edit_worker_account_and_details(:name, :surname, :patronymic, :hired_at, :role_id, :position_details, :email, :user_id, :worker_id)";
+        $params = [
+            ':name' => $name,
+            ':surname' => $surname,
+            ':patronymic' => $patronymic,
+            ':hired_at' => $date,
+            ':role_id' => $role,
+            ':position_details' => $position_details,
+            ':email' => $email,
+            ':user_id' => $user_id,
+            ':worker_id' => $id,
+        ];
+        $this->actionQuery($query, $params);
     }
 
     public function delete($id){
-        $query = "UPDATE worker_details  SET is_active = false
-          WHERE id = :worker_id;";
-          $this->actionQuery($query, ['worker_id' => $id]);
+        $query = "CALL deactivate_worker(:worker_id)";
+        $params = ['worker_id' => $id];
+        $this->actionQuery($query, $params);
     }
 }

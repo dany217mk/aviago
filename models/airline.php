@@ -8,28 +8,22 @@ class Airline extends Model
     }
 
     public function add($name, $country, $airport_id, $icao, $iata, $user_id, $logo){
-        try{
-            $query = "INSERT INTO airline (name, country, airport_id, icao, iata, user_id, logo)
-                      VALUES (:name, :country, :airport_id, :icao, :iata, :user_id, :logo)";
+        try {
+            $query = "CALL add_airline_and_update_user(:name, :country, :airport_id, :icao, :iata, :user_id, :logo)";
             $params = [
                 ':name' => $name,
                 ':country' => $country,
                 ':airport_id' => $airport_id,
                 ':icao' => $icao,
-                ':iata' => $iata, 
+                ':iata' => $iata,
                 ':user_id' => $user_id,
                 ':logo' => $logo,
             ];
             $this->actionQuery($query, $params);
-        }  catch (PDOException $e) {
+        } catch (PDOException $e) {
             header("Location: " . FULL_SITE_ROOT . "/report/525");
             exit;
         }
-        
-
-             $query2 = "UPDATE user_account SET role_id = 1 WHERE id = :user_id";
-             $this->actionQuery($query2, [':user_id' => $user_id]);
-        
     }
 
 
@@ -51,7 +45,7 @@ class Airline extends Model
 
     public function addAirlineToCharter($airline_id, $charter_id) {
         try {
-            $query = "UPDATE charter_request SET airline_id = :airline_id WHERE id = :charter_id";
+            $query = "CALL add_airline_to_charter(:airline_id, :charter_id)";
             $params = [
                 ':airline_id' => $airline_id,
                 ':charter_id' => $charter_id

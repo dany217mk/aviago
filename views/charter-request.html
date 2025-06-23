@@ -54,7 +54,7 @@
                     <div class="form-row">
                         <label for="airline">Авиакомпания</label>
                         <select name="airline" id="airline" class="operator">
-                            <!--<option value="null">Любая</option>-->
+                            <option value="null">Любая</option>
                             <?php foreach ($airlines as $airline): ?>
                                 <option value="<?= $airline['id']; ?>">
                                     <?= htmlspecialchars($airline['name'] . " " . $airline['iata']); ?>
