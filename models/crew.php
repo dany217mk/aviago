@@ -70,4 +70,90 @@ class Crew extends Model
         $params = [':crew_id' => $crew_id];
         $this->actionQuery($query, $params);
     }
+
+    public function getMyShedule(int $user_id): array
+    {
+        $query = "
+            SELECT
+                f.flight_code,
+                f.flight_number,
+                f.dep_time,
+                f.arr_time,
+                a.name AS airline_name,
+                ap_dep.name AS dep_airport,
+                ap_arr.name AS arr_airport,
+                al.name AS airplane_name,
+                aa.registration AS airplane_registration,
+                al.capacity AS airplane_capacity,
+                cr.passenger_count AS charter_passenger_count,
+                fs.status_name AS flight_status,
+                -- Подсчёт купленных билетов со статусом confirmed или checked-in
+                (
+                    SELECT COUNT(*)
+                    FROM booking b
+                    WHERE b.flight_id = f.id
+                    AND b.status IN ('confirmed', 'checked-in')
+                ) AS tickets_sold
+            FROM crew c
+            INNER JOIN flight f ON c.flight_id = f.id
+            INNER JOIN airplane_airline aa ON f.airplane_airline_id = aa.id
+            INNER JOIN airplane al ON aa.airplane_id = al.id
+            INNER JOIN airline a ON aa.airline_id = a.id
+            INNER JOIN airport ap_dep ON f.dep_airport_id = ap_dep.id
+            INNER JOIN airport ap_arr ON f.arr_airport_id = ap_arr.id
+            INNER JOIN charter_request cr ON f.charter_request_id = cr.id
+            INNER JOIN flight_status fs ON f.flight_status_id = fs.id
+            INNER JOIN worker_details wd ON c.worker_id = wd.id
+            INNER JOIN user_account ua ON wd.user_id = ua.id
+            WHERE ua.id = :user_id
+            AND f.dep_time >= NOW()
+            ORDER BY f.dep_time ASC
+        ";
+
+        return $this->returnAllfetchAssoc($query, [':user_id' => $user_id]);
+    }
+
+
+    public function getMyFlightHistory(int $user_id): array
+    {
+        $query = "
+            SELECT
+                f.flight_code,
+                f.flight_number,
+                f.dep_time,
+                f.arr_time,
+                a.name AS airline_name,
+                ap_dep.name AS dep_airport,
+                ap_arr.name AS arr_airport,
+                al.name AS airplane_name,
+                aa.registration AS airplane_registration,
+                al.capacity AS airplane_capacity,
+                cr.passenger_count AS charter_passenger_count,
+                fs.status_name AS flight_status,
+                (
+                    SELECT COUNT(*)
+                    FROM booking b
+                    WHERE b.flight_id = f.id
+                    AND b.status IN ('confirmed', 'checked-in')
+                ) AS tickets_sold
+            FROM crew c
+            INNER JOIN flight f ON c.flight_id = f.id
+            INNER JOIN airplane_airline aa ON f.airplane_airline_id = aa.id
+            INNER JOIN airplane al ON aa.airplane_id = al.id
+            INNER JOIN airline a ON aa.airline_id = a.id
+            INNER JOIN airport ap_dep ON f.dep_airport_id = ap_dep.id
+            INNER JOIN airport ap_arr ON f.arr_airport_id = ap_arr.id
+            INNER JOIN charter_request cr ON f.charter_request_id = cr.id
+            INNER JOIN flight_status fs ON f.flight_status_id = fs.id
+            INNER JOIN worker_details wd ON c.worker_id = wd.id
+            INNER JOIN user_account ua ON wd.user_id = ua.id
+            WHERE ua.id = :user_id
+            AND f.dep_time < NOW()
+            ORDER BY f.dep_time DESC
+        ";
+
+        return $this->returnAllfetchAssoc($query, [':user_id' => $user_id]);
+    }
+
+
 }

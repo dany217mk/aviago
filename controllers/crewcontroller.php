@@ -73,4 +73,50 @@ class CrewController extends Controller
         exit;
     }
 
+    public function actionMySchedule(){
+        if (!$this->userModel->isAuth()) {
+            header("Location: ./");
+        }
+        $title =  'Мое расписание';
+        $scripts = [];
+        $styles = [CSS . '/profile.css', CSS . '/workers.css'];
+        $menu = $this->helper->getMenu($this->user['access_level']);
+
+        $airline = $this->userModel->getUserAirline($this->user['id']);
+
+        $this->helper->outputCommonHead($title, '', $styles);
+
+        $data = $this->crewModel->getMyShedule($this->user['id']);
+
+
+        echo "<div class='main-block'>";
+        require_once  './views/common/menu.html';
+        require_once  './views/crew/my_schedule.html';
+        echo "</div>";
+        $this->helper->outputCommonFoot($scripts);
+    }
+
+    public function actionMyFlightHistory(){
+         if (!$this->userModel->isAuth()) {
+            header("Location: ./");
+        }
+        $title =  'Мое расписание';
+        $scripts = [];
+        $styles = [CSS . '/profile.css', CSS . '/workers.css'];
+        $menu = $this->helper->getMenu($this->user['access_level']);
+
+        $airline = $this->userModel->getUserAirline($this->user['id']);
+
+        $this->helper->outputCommonHead($title, '', $styles);
+
+        $data = $this->crewModel->getMyFlightHistory($this->user['id']);
+
+
+        echo "<div class='main-block'>";
+        require_once  './views/common/menu.html';
+        require_once  './views/crew/my_flight_history.html';
+        echo "</div>";
+        $this->helper->outputCommonFoot($scripts);
+    }
+
 }
