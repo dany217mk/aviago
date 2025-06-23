@@ -5,7 +5,7 @@
         </div>
         <form class="check_in_form<?= isset($result['booking']) && $result['booking'] ? ' found' : '' ?>" method="post">
             <input type="text" placeholder="Email:" name="reg_email"
-                value="<?= isset($_POST['reg_email']) ? htmlspecialchars($_POST['reg_email']) : '' ?>">
+                value="<?= isset($_POST['reg_email']) ? htmlspecialchars($_POST['reg_email']) : (isset($user['email']) ? htmlspecialchars($user['email']) : '') ?>">
             <input type="text" placeholder="Номер бронирования" name="booking_number"
                 value="<?= isset($_POST['booking_number']) ? htmlspecialchars($_POST['booking_number']) : '' ?>">
             <input type="submit" value="Найти рейсы">
@@ -28,7 +28,9 @@
                         <select name="check_in_seat<?= $counter; ?>">
                             <option value="0">Выберите место</option>
                             <? foreach($seats as $seat): ?>
-                                <option value="<?= $item['booking_passenger_id']; ?>-<?= $seat['id']; ?>"><?= $seat['number']; ?></option>
+                                <option value="<?= $item['booking_passenger_id']; ?>-<?= $seat['id']; ?>">
+                                    <?= $seat['number']; ?> - <?= $seat['type']; ?><?= $seat['is_emergency_exit'] ? ' (авар. выход)' : '' ?>
+                                </option>
                             <? endforeach; ?>
                         </select> 
                     </div>

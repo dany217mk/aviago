@@ -133,6 +133,19 @@ class User extends Model
 
     }
 
+    public function getAirlineByWorker($user_id) {
+        $query = "
+            SELECT airline.*, airport.name as airport_name, airport.iata as airport_iata
+            FROM worker_details
+            JOIN airline ON worker_details.airline_id = airline.id
+            LEFT JOIN airport ON airport.id = airline.airport_id
+            WHERE worker_details.user_id = :user_id AND worker_details.is_active = true
+            LIMIT 1
+        ";
+
+        return $this->returnAssoc($query, [':user_id' => $user_id]);
+    }
+
 
 
 }

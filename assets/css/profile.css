@@ -1,5 +1,5 @@
 .main-block{
-    width: 1440px;
+    width: 100%;
     margin: 0 auto;
     margin-top: 15px;
     position: relative;
@@ -9,6 +9,7 @@
     width: 210px;
     border-right: 1px solid #eee;
     height: 100%;
+    left: 10px;
 }
 .menu ul {
     list-style: none;
@@ -44,10 +45,10 @@ footer {
 }
 
 .clm {
-    width: 1200px;
+    width: 83%;
     overflow-x: scroll;
-    margin-right: 0;
-    margin-left: auto;
+    margin-right: 10px;
+    margin-left: 250px;
     padding: 20px;
     border: 1px solid #eee;
 }
@@ -118,8 +119,21 @@ tbody td a.red{
 tbody td a.green{
     color: green !important;
 }
+tbody td a.usual{
+    border: none !important;
+    background: transparent !important;
+    color: #007bff !important;
+}
 tbody td:last-child a:first-child{
   color: green;
   display: inline-block;
   margin-bottom: 10px;
+}
+
+#charter_decision_form{
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+    gap: 20px;
+    margin-top: 10px;
 }

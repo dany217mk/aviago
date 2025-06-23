@@ -2,6 +2,16 @@
 $routes = array(
   'AirlineController' => array(
     'create_organization' => 'create',
+    'airline_charters' => 'airlineCharters',
+    'airline_charter/([a-zA-Z0-9\-]+)' => 'airlineCharter/$1',
+    'airline_flights' => 'airlineFlights',
+    'add_airline_to_charter_request/([0-9]+)' => 'addAirlineToCharter/$1',
+    'flight_archive/([a-zA-Z0-9]+)' => 'flightArchive/$1',
+    'airline_flight/([a-zA-Z0-9\-]+)' => 'airlineFlight/$1',
+  ),
+  'CrewController' => array(
+    'my_schedule' => 'mySchedule',
+    'my_flight_history' => 'myFlightHistory',
   ),
   'PlaneController' => array(
     'planes' => 'plane',

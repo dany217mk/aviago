@@ -327,5 +327,146 @@ class Flight extends Model
         return $this->returnAllfetchAssoc($query, ['charter_request_id' => $charter_request_id]);
     }
 
+
+
+
+    public function getFlightsByAirlineId($airline_id) {
+        $query = "
+            SELECT 
+                f.*,
+                fs.status_name AS flight_status,
+                dep.name AS departure_airport,
+                arr.name AS arrival_airport,
+                cr.request_code,
+                cr.passenger_count,
+                cr.allow_public_sales,
+                cr.status AS charter_status,
+                cr.departure_date,
+                cr.comment,
+                cc.organization_name,
+                COALESCE(ua.email, cc.email) AS user_email,
+                COALESCE(ua.surname || ' ' || ua.name || ' ' || ua.patronymic, cc.contact_fio) AS user_fullname,
+                wu.surname || ' ' || wu.name || ' ' || wu.patronymic AS worker_fullname,
+                wu.email AS worker_email,
+                a.name AS airplane_name,
+                a.capacity AS airplane_capacity,
+                aa.registration AS airplane_registration
+            FROM flight f
+            LEFT JOIN flight_status fs ON f.flight_status_id = fs.id
+            LEFT JOIN airport dep ON f.dep_airport_id = dep.id
+            LEFT JOIN airport arr ON f.arr_airport_id = arr.id
+            LEFT JOIN charter_request cr ON f.charter_request_id = cr.id
+            LEFT JOIN user_account ua ON cr.user_id = ua.id
+            LEFT JOIN charter_contact cc ON cr.id = cc.request_id
+            LEFT JOIN user_account wu ON f.worker_id = wu.id
+            LEFT JOIN airplane_airline aa ON f.airplane_airline_id = aa.id
+            LEFT JOIN airplane a ON aa.airplane_id = a.id
+            WHERE aa.airline_id = :airline_id AND f.is_archived = false
+            ORDER BY f.dep_time DESC
+        ";
+
+        return $this->returnAllfetchAssoc($query, [':airline_id' => $airline_id]);
+    }
+
+
+
+    public function setFlightArchive($flight_code, $airline_id) {
+        try {
+            $query = "
+                UPDATE flight
+                SET is_archived = TRUE
+                WHERE flight_code = :flight_code
+                AND airplane_airline_id IN (
+                    SELECT id FROM airplane_airline WHERE airline_id = :airline_id
+                )
+            ";
+
+            $params = [
+                ':flight_code' => $flight_code,
+                ':airline_id' => $airline_id,
+            ];
+
+            $this->actionQuery($query, $params);
+
+        } catch (PDOException $e) {
+            echo "Ошибка при архивации рейса: " . $e->getMessage();
+            die;
+        }
+    }
+
+
+
+    public function getFlightByCharterId($charter_id) {
+        $query = "SELECT * FROM flight WHERE charter_request_id = :charter_id LIMIT 1";
+        return $this->returnAssoc($query, [':charter_id' => $charter_id]);
+    }
+
+    public function getAllFlightStatuses() {
+        return $this->returnAllAssoc("SELECT * FROM flight_status");
+    }
+
+
+
+
+    public function generateFlightCode() {
+        $query = "SELECT generate_unique_flight_code() AS code"; // ваша SQL функция
+        $stmt = $this->con->query($query);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row['code'];
+    }
+
+    public function generateFlightNumber($iata_code) {
+        $query = "SELECT generate_unique_flight_number(:iata) AS number"; // ваша SQL функция
+        $stmt = $this->con->prepare($query);
+        $stmt->execute([':iata' => $iata_code]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row['number'];
+    }
+
+    public function add($dep_airport_id, $arr_airport_id, $flight_status_id, $airplane_airline_id, $dep_time, $arr_time, $flight_number, $allow_public_sales, $flight_code, $charter_request_id, $charter_seats_number, $worker_id) {
+        $query = "INSERT INTO flight (dep_airport_id, arr_airport_id, flight_status_id, airplane_airline_id, dep_time, arr_time, flight_number, allow_public_sales, flight_code, charter_request_id, charter_seats_number, worker_id, is_archived)
+                VALUES (:dep_airport_id, :arr_airport_id, :flight_status_id, :airplane_airline_id, :dep_time, :arr_time, :flight_number, :allow_public_sales, :flight_code, :charter_request_id, :charter_seats_number, :worker_id, FALSE)";
+        $params = [
+            ':dep_airport_id' => $dep_airport_id,
+            ':arr_airport_id' => $arr_airport_id,
+            ':flight_status_id' => $flight_status_id,
+            ':airplane_airline_id' => $airplane_airline_id,
+            ':dep_time' => $dep_time,
+            ':arr_time' => $arr_time,
+            ':flight_number' => $flight_number,
+            ':allow_public_sales' => $allow_public_sales,
+            ':flight_code' => $flight_code,
+            ':charter_request_id' => $charter_request_id,
+            ':charter_seats_number' => $charter_seats_number,
+            ':worker_id' => $worker_id
+        ];
+        $this->returnActionQuery($query, $params);
+    }
+
+    public function edit($dep_airport_id, $arr_airport_id, $flight_status_id, $airplane_airline_id, $dep_time, $arr_time, $allow_public_sales, $charter_seats_number, $flight_id) {
+        $query = "UPDATE flight SET 
+                    dep_airport_id = :dep_airport_id,
+                    arr_airport_id = :arr_airport_id,
+                    flight_status_id = :flight_status_id,
+                    airplane_airline_id = :airplane_airline_id,
+                    dep_time = :dep_time,
+                    arr_time = :arr_time,
+                    allow_public_sales = :allow_public_sales,
+                    charter_seats_number = :charter_seats_number
+                WHERE id = :flight_id";
+        $params = [
+            ':dep_airport_id' => $dep_airport_id,
+            ':arr_airport_id' => $arr_airport_id,
+            ':flight_status_id' => $flight_status_id,
+            ':airplane_airline_id' => $airplane_airline_id,
+            ':dep_time' => $dep_time,
+            ':arr_time' => $arr_time,
+            ':allow_public_sales' => $allow_public_sales,
+            ':charter_seats_number' => $charter_seats_number,
+            ':flight_id' => $flight_id
+        ];
+        $this->actionQuery($query, $params);
+    }
+
     
 }

@@ -1,0 +1,66 @@
+<div class="clm">
+    <div class="navi">
+        <h2>Заявка на чартер <?= htmlspecialchars($charter['request_code']); ?></h2>
+        <a href="<?= FULL_SITE_ROOT ?>/airline_flight/<?= $charter['request_code']; ?>" class="link_add">Создать рейс</a>
+    </div>
+
+    <table class="info_table">
+        <tr>
+            <th>Заказчик:</th>
+            <td>
+                <?= !empty($charter['organization_name']) ? htmlspecialchars($charter['organization_name']) . ', ' : ''; ?>
+                <a href="mailto:<?= htmlspecialchars($charter['user_email']); ?>" class="usual">
+                    <?= htmlspecialchars($charter['user_email']); ?>
+                </a>
+                <?= htmlspecialchars($charter['user_fullname']); ?>
+            </td>
+        </tr>
+        <tr>
+            <th>Вылет:</th>
+            <td><?= htmlspecialchars($charter['departure_airport']); ?></td>
+        </tr>
+        <tr>
+            <th>Прилет:</th>
+            <td><?= htmlspecialchars($charter['arrival_airport']); ?></td>
+        </tr>
+        <tr>
+            <th>Дата:</th>
+            <td><?= htmlspecialchars($charter['departure_date']); ?></td>
+        </tr>
+        <tr>
+            <th>Авиакомпания:</th>
+            <td><?= htmlspecialchars($charter['airline_name']); ?></td>
+        </tr>
+        <tr>
+            <th>Количество пассажиров</th>
+            <td><?= htmlspecialchars($charter['passenger_count']); ?></td>
+        </tr>
+        <tr>
+            <th>Публичная продажа</th>
+            <td><?= $charter['allow_public_sales'] ? 'Да' : 'Нет'; ?></td>
+        </tr>
+        <tr>
+            <th>Дополнительная информация:</th>
+            <td>
+                <?= !empty($charter['additional_info']) ? nl2br(htmlspecialchars($charter['additional_info'])) : '-' ?>
+            </td>
+        </tr>
+    </table>
+
+    <h2 class="table-title">Решение по заявке</h2>
+    <form method="post" id="charter_decision_form">
+        <div>
+            <label>Статус</label>
+            <select name="status" id="status">
+                <option value="pending" <?= ($charter['status'] === 'pending') ? 'selected' : '' ?>>pending</option>
+                <option value="rejected" <?= ($charter['status'] === 'rejected') ? 'selected' : '' ?>>rejected</option>
+                <option value="approved" <?= ($charter['status'] === 'approved') ? 'selected' : '' ?>>approved</option>
+            </select>
+        </div>
+        <div>
+            <label>Комментарий</label>
+            <textarea name="comment" id="comment"><?= htmlspecialchars($charter['comment']); ?></textarea>
+        </div>
+        <input type="submit" value="Сохранить">
+    </form>
+</div>

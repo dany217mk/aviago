@@ -47,4 +47,20 @@ class Airline extends Model
 
         return $data;
     }
+
+
+    public function addAirlineToCharter($airline_id, $charter_id) {
+        try {
+            $query = "UPDATE charter_request SET airline_id = :airline_id WHERE id = :charter_id";
+            $params = [
+                ':airline_id' => $airline_id,
+                ':charter_id' => $charter_id
+            ];
+            $this->actionQuery($query, $params);
+        } catch (PDOException $e) {
+            echo "Ошибка при добавлении авиакомпании к заявке: " . $e->getMessage();
+            header("Location: " . FULL_SITE_ROOT . "/report/523");
+            die;
+        }
+    }   
 }

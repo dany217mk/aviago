@@ -44,6 +44,7 @@ class Plane extends Model
         } catch (PDOException $e) {
             $this->con->rollBack();
             echo "Ошибка: " . $e->getMessage();
+            header("Location: " . FULL_SITE_ROOT . "/report/128");
             die;
             return -1;
         }
@@ -69,19 +70,41 @@ class Plane extends Model
         return $data;
     }
 
-    public function edit($airplane, $registration, $id){
-        $query = "UPDATE airplane_airline  SET airplane_id = :airplane, registration = :registration
-          WHERE id = :id;";
-          $params = [
-                ':airplane' => $airplane,
-                ':registration' => $registration,
-                ':id' => $id,
-          ];
-          $this->actionQuery($query, $params);
+    public function edit($airplane, $registration, $id) {
+    try {
+        $this->con->beginTransaction();
+
+        $query = "UPDATE airplane_airline 
+                  SET airplane_id = :airplane, registration = :registration
+                  WHERE id = :id";
+        $params = [
+            ':airplane' => $airplane,
+            ':registration' => $registration,
+            ':id' => $id,
+        ];
+        $this->actionQuery($query, $params);
+
+        $this->con->commit();
+    } catch (PDOException $e) {
+        $this->con->rollBack();
+        header("Location: " . FULL_SITE_ROOT . "/report/128");
+        die;
     }
+}
+
 
     public function delete(int $id) {
         $query = "DELETE FROM airplane_airline WHERE id = :plane_id;";
         $this->actionQuery($query, ['plane_id' => $id]);
+    }
+
+    public function getAirplanesByAirline($airline_id) {
+        $query = "
+            SELECT aa.id, a.name, a.capacity, aa.registration
+            FROM airplane_airline aa
+            JOIN airplane a ON aa.airplane_id = a.id
+            WHERE aa.airline_id = :airline_id
+        ";
+        return $this->returnAllfetchAssoc($query, [':airline_id' => $airline_id]);
     }
 }

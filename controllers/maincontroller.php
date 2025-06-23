@@ -288,6 +288,10 @@ public function actionCharterCheck() {
       }
     }
 
+    if (isset($_COOKIE['uid'])){
+      $user = $this->userModel->getUser();
+    }
+
     if (isset($_POST['check_in_seat0'])){
       $success = $bookingModel->checkInPassengers($_POST['booking_id'], $_POST);
       if ($success) {
