@@ -1,0 +1,40 @@
+<div class="clm">
+    <div class="navi">
+        <h2>История покупок</h2>
+    </div>
+    <table class="table">
+    <thead>
+        <tr>
+            <th>Номер бронирования</th>
+            <th>Статус бронирования</th>
+            <th>Почта</th>
+            <th>Вылет</th>
+            <th>Прилет</th>
+            <th>Авиакомпания</th>
+            <th>Самолет</th>
+            <th>Количество пассажиров в бронировании</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        <? foreach($data as $item): ?>
+            <tr>
+                <td><?= $item['booking_number']; ?></td>
+                <td><?= $item['booking_status']; ?></td>
+                <td><?= $item['passenger_email']; ?></td>
+                <td><?= $item['dep_airport']; ?> <?= $item['dep_time']; ?></td>
+                <td><?= $item['arr_airport']; ?> <?= $item['arr_time']; ?></td>
+                <td><?= $item['airline_name']; ?></td>
+                <td><?= $item['airplane_name']; ?></td>
+                <td><?= $item['passenger_count']; ?></td>
+                <td>
+                    <a href="./ticket/<?= $item['booking_number']; ?>" class="action-btn">Подробнее</a>
+                </td>
+            </tr>
+        <? endforeach; ?>
+    </tbody>
+    </table>
+     <? if (count($data) == 0): ?>
+        <i>У вас пока нет активных билетов</i>
+    <? endif; ?>
+</div>

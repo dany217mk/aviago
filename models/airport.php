@@ -9,5 +9,9 @@ class Airport extends Model
         return $data;
     }
 
+    public function getAllAirports() {
+        return $this->returnAllAssoc("SELECT * FROM airport ORDER BY city, name");
+    }
+
     
 }

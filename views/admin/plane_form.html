@@ -1,0 +1,27 @@
+<div class="clm">
+    <div>
+        <div class="linkBack">
+        <a href="<?=FULL_SITE_ROOT?>/planes"><i class="fa-solid fa-arrow-left"></i>назад</a>
+      </div><h1>Управление самолетами авиакомпании</h1>
+    </div>
+    <form class="form_add" id="plane_form_add" method="POST">
+        <div>
+            <label>Модель самолета</label>
+            <select name="airplane" id="airplane">
+                <? foreach($planes as $p): ?>
+                    <option value="<?= $p['id']; ?>" <?= (isset($plane) && $plane['airplane_id'] == $p['id']) ? 'selected' : '' ?>>
+                        <?= $p['name']; ?>, Вместимость: <?= $p['capacity']; ?>
+                    </option>
+                <? endforeach; ?>
+            </select>
+        </div>
+        <div>
+            <label>Регистрационный номер</label>
+            <input type="text" name="registration" id="registration" value="<?= isset($plane) ? htmlspecialchars($plane['registration']) : '' ?>">
+        </div>
+        <div>
+            <input type="submit" value="Отправить">
+        </div>
+    </form>
+
+</div>

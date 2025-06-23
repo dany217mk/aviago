@@ -10,7 +10,7 @@ class User extends Model
             if ($res->rowCount() > 0){
                 if (time() > $_COOKIE['tt']){
                     $token = $this->helper->generationToken();
-                    $timeToken = time() + 1800;
+                    $timeToken = time() + 2*24*3600;
                     $query = "UPDATE connect SET token = :new_token, time = TO_TIMESTAMP(:timeToken) WHERE user_id = :user_id and token = :token;";
                     $params = ['user_id' => $_COOKIE['uid'], 'token' => $_COOKIE['t'], 'new_token' => $token, 'timeToken' => $timeToken];
                     $this->actionQuery($query, $params);
@@ -131,6 +131,19 @@ class User extends Model
         $data = $this->returnAssoc($query, ["uid" => $uid]);
         return $data;
 
+    }
+
+    public function getAirlineByWorker($user_id) {
+        $query = "
+            SELECT airline.*, airport.name as airport_name, airport.iata as airport_iata
+            FROM worker_details
+            JOIN airline ON worker_details.airline_id = airline.id
+            LEFT JOIN airport ON airport.id = airline.airport_id
+            WHERE worker_details.user_id = :user_id AND worker_details.is_active = true
+            LIMIT 1
+        ";
+
+        return $this->returnAssoc($query, [':user_id' => $user_id]);
     }
 
 

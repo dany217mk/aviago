@@ -3,16 +3,16 @@
         <div class="title">
         <h1>Онлайн регистрация</h1> 
         </div>
-        <form class="check_in_form<?= isset($data) && $data ? ' found' : '' ?>" method="post">
+        <form class="check_in_form<?= isset($result['booking']) && $result['booking'] ? ' found' : '' ?>" method="post">
             <input type="text" placeholder="Email:" name="reg_email"
-                value="<?= isset($_POST['reg_email']) ? htmlspecialchars($_POST['reg_email']) : '' ?>">
+                value="<?= isset($_POST['reg_email']) ? htmlspecialchars($_POST['reg_email']) : (isset($user['email']) ? htmlspecialchars($user['email']) : '') ?>">
             <input type="text" placeholder="Номер бронирования" name="booking_number"
                 value="<?= isset($_POST['booking_number']) ? htmlspecialchars($_POST['booking_number']) : '' ?>">
             <input type="submit" value="Найти рейсы">
         </form>
 
-        <? if (isset($_POST['reg_email']) && $data): ?>
-            <? if ($data[0]['status'] == "checked-in"): ?>
+        <? if (isset($_POST['reg_email']) && $result['booking']): ?>
+            <? if ($bookingInfo['status'] == "checked-in"): ?>
                 <b class="text-info">Вы уже зарегестрированы на рейс. Посадочный талон отправлен Вам на почту.</b>
             <? else: ?>
             <? if ($hours_to_departure <= 24 && $hours_to_departure > 0.5): ?>
@@ -20,15 +20,17 @@
 
 
                 <form method="post" class="check_in_seats_form">
-                <input type="hidden" name="booking_id" value="<?= $data[0]['id']; ?>">
+                <input type="hidden" name="booking_id" value="<?= $bookingInfo['id']; ?>">
                 <? $counter = 0; ?>
-                <? foreach($data as $item): ?>
+                <? foreach($passengers as $item): ?>
                     <div>
                         <label><?= $item['surname'] . ' ' . $item['name'] . ' ' . $item['patronymic'] ?></label>
                         <select name="check_in_seat<?= $counter; ?>">
                             <option value="0">Выберите место</option>
                             <? foreach($seats as $seat): ?>
-                                <option value="<?= $item['booking_passenger_id']; ?>-<?= $seat['id']; ?>"><?= $seat['number']; ?></option>
+                                <option value="<?= $item['booking_passenger_id']; ?>-<?= $seat['id']; ?>">
+                                    <?= $seat['number']; ?> - <?= $seat['type']; ?><?= $seat['is_emergency_exit'] ? ' (авар. выход)' : '' ?>
+                                </option>
                             <? endforeach; ?>
                         </select> 
                     </div>

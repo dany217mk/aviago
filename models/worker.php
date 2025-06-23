@@ -1,5 +1,5 @@
 <?php
-class worker extends Model
+class Worker extends Model
 {
     public function getAllFromAirline($airline_id){
         $query = "SELECT worker_details.*, user_account.name as worker_name,

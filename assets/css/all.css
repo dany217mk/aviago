@@ -92,7 +92,7 @@ button:focus, input[type="submit"]:focus {
   outline: none;
   box-shadow: 0 0 0 4px #cbd6ee;
 }
-input[type="text"], input[type="date"], input[type="file"], input[type="email"], input[type="password"], input[type="number"], select{
+input[type="text"], input[type="date"], input[type="file"], input[type="email"], input[type="password"], input[type="number"], input[type="datetime-local"], select{
 	width: 300px;
 	font-size: 13px;
 	padding: .5rem 1rem;
@@ -100,6 +100,9 @@ input[type="text"], input[type="date"], input[type="file"], input[type="email"],
 	background: #F6F6f6;
 	border-radius: 8px;
 	transition: all 0.4s ease;
+}
+input[type="text"]:read-only{
+  background: #cecece;;
 }
 input.charter_input{
   background: #fff;
@@ -171,6 +174,9 @@ input[type=radio] + label {
   justify-content: center;
   gap: 5px;
   text-decoration: none;
+}
+.header__item:last-child{
+  gap: 15px;
 }
 .header__title{
   font-size: 28px;

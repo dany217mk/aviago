@@ -1,0 +1,167 @@
+<div class="clm">
+    <div>
+        <div class="linkBack">
+            <a href="<?= FULL_SITE_ROOT ?>/airline_flights"><i class="fa-solid fa-arrow-left"></i>назад</a>
+        </div>
+        <h1>
+            <?php if (!empty($flight)): ?>
+                Редактирование рейса
+            <?php else: ?>
+                Создание рейса по чартерной заявке 
+                <a href="<?= FULL_SITE_ROOT; ?>/airline_charter/<?= htmlspecialchars($charter['request_code']); ?>">
+                    <?= htmlspecialchars($charter['request_code']); ?>
+                </a>
+            <?php endif; ?>
+        </h1>
+    </div>
+
+    <form class="form_add" method="POST">
+
+        <!-- Аэропорт вылета -->
+        <div>
+            <label>Аэропорт вылета:</label>
+            <select name="dep_airport_id" id="dep_airport_id" required class="required">
+                <?php foreach ($airports as $airport): ?>
+                    <?php
+                        $selected_id = $flight['dep_airport_id'] ?? $charter['departure_airport_id'];
+                        $selected = $selected_id == $airport['id'] ? 'selected' : '';
+                    ?>
+                    <option value="<?= $airport['id'] ?>" <?= $selected ?>>
+                        <?= htmlspecialchars($airport['name']) ?> (<?= $airport['iata'] ?>, <?= $airport['city'] ?>)
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+
+        <!-- Аэропорт прилета -->
+        <div>
+            <label>Аэропорт прилета:</label>
+            <select name="arr_airport_id" id="arr_airport_id"  required class="required">
+                <?php foreach ($airports as $airport): ?>
+                    <?php
+                        $selected_id = $flight['arr_airport_id'] ?? $charter['arrival_airport_id'];
+                        $selected = $selected_id == $airport['id'] ? 'selected' : '';
+                    ?>
+                    <option value="<?= $airport['id'] ?>" <?= $selected ?>>
+                        <?= htmlspecialchars($airport['name']) ?> (<?= $airport['iata'] ?>, <?= $airport['city'] ?>)
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+
+        <!-- Самолет -->
+        <div>
+        <label>Самолет:</label>
+        <select name="airplane_airline_id" id="airplane_airline_id" required class="required">
+            <?php
+                $selected_id = !empty($flight) ? $flight['airplane_airline_id'] : $charter['airplane_airline_id'] ?? null;
+            ?>
+            <?php foreach ($airplanes as $plane): ?>
+                <?php
+                    $selected = ($selected_id == $plane['id']) ? 'selected' : '';
+                ?>
+                <option value="<?= $plane['id'] ?>" data-capacity="<?= (int)$plane['capacity'] ?>" <?= $selected ?>>
+                    <?= htmlspecialchars($plane['name']) ?> — <?= $plane['capacity'] ?> мест (рег. <?= $plane['registration'] ?>)
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+        <!-- Дата и время вылета -->
+        <div>
+            <label>Дата и время вылета:</label>
+            <input type="datetime-local" name="dep_time" required
+                value="<?=
+                    isset($flight['dep_time']) ? 
+                        date('Y-m-d\TH:i', strtotime($flight['dep_time'])) :
+                    (isset($charter['departure_date']) ? 
+                        date('Y-m-d', strtotime($charter['departure_date'])) . 'T00:00' :
+                        date('Y-m-d') . 'T00:00')
+                ?>">
+        </div>
+
+
+        <!-- Время прилета -->
+        <div>
+            <label>Дата и время прилета:</label>
+            <input type="datetime-local" name="arr_time" required
+                   value="<?= isset($flight['arr_time']) ? date('Y-m-d\TH:i', strtotime($flight['arr_time'])) : '' ?>">
+        </div>
+
+        <!-- Статус рейса -->
+        <div>
+            <label>Статус рейса:</label>
+            <select name="flight_status_id" required>
+                <?php foreach ($flight_statuses as $status): ?>
+                    <?php
+                        $selected = (isset($flight) && $flight['flight_status_id'] == $status['id']) ? 'selected' : '';
+                    ?>
+                    <option value="<?= $status['id'] ?>" <?= $selected ?>>
+                        <?= htmlspecialchars($status['status_name']) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+
+        <!-- Номер рейса -->
+        <div>
+            <label>Номер рейса:</label>
+            <input type="text" name="flight_number"
+                value="<?= $flight['flight_number'] ?? '' ?>"
+                placeholder="<?= empty($flight['flight_number']) ? 'Будет заполнено автоматически' : '' ?>" readonly>
+        </div>
+
+        <!-- Код рейса -->
+        <div>
+            <label>Код рейса:</label>
+            <input type="text" name="flight_code"
+                value="<?= $flight['flight_code'] ?? '' ?>"
+                placeholder="<?= empty($flight['flight_code']) ? 'Будет заполнено автоматически' : '' ?>" readonly>
+        </div>
+        
+
+        <!-- Разрешена продажа? -->
+        <div>
+            <label>
+                <input type="checkbox" name="allow_public_sales" value="1"
+                    <?= (!empty($flight) ? !empty($flight['allow_public_sales']) : !empty($charter['allow_public_sales'])) ? 'checked' : '' ?>>
+                Разрешить продажу билетов
+            </label>
+        </div>
+
+        <!-- Места в чартере -->
+        <div>
+            <label>Количество мест, зарезервированных за чартером:</label>
+            <input type="number" name="charter_seats_number" min="0" step="1"
+                   value="<?= $flight['charter_seats_number'] ?? $charter['passenger_count'] ?>">
+        </div>
+
+        <div>
+            <input type="submit" value="<?= isset($flight) ? 'Сохранить изменения' : 'Создать рейс' ?>">
+        </div>
+    </form>
+</div>
+
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+<script>
+    
+    document.addEventListener('DOMContentLoaded', function() {
+    const selectElement = document.getElementById('dep_airport_id');
+    if (selectElement) {
+        $(selectElement).select2();
+    }
+    const selectElement2 = document.getElementById('arr_airport_id');
+    if (selectElement2) {
+        $(selectElement2).select2();
+    }
+    const selectElement3 = document.getElementById('airplane_airline_id');
+    if (selectElement3) {
+        $(selectElement3).select2();
+    }
+});
+</script>

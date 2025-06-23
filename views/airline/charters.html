@@ -1,0 +1,53 @@
+<div class="clm">
+    <div class="navi">
+        <h2>Заявки на чартерные рейсы</h2>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Номер заявки</th>
+                <th>Авиакомпания</th>
+                <th>Клиент</th>
+                <th>Откуда</th>
+                <th>Куда</th>
+                <th>Дата вылета</th>
+                <th>Пассажиров</th>
+                <th>Публичная продажа</th>
+                <th>Статус</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            <? foreach($data as $item): ?>
+                <tr>
+                    <td><?= $item['request_code']; ?></td>
+                    <td><?= $item['airline_name']; ?></td>
+                    <td><?= $item['organization_name']; ?> <a href="mailto:<?= $item['user_email']; ?>"><?= $item['user_email']; ?></a> <?= $item['user_fullname']; ?> </td>
+                    <td><?= $item['departure_airport']; ?></td>
+                    <td><?= $item['arrival_airport']; ?></td>
+                    <td><?= $item['departure_date']; ?></td>
+                    <td><?= $item['passenger_count']; ?></td>
+                    <td><?= $item['allow_public_sales'] ? 'Да' : 'Нет'; ?></td>
+                    <td><?= $item['status']; ?></td>
+                    <td>
+                        <? if ($item['flight_id']): ?>
+                            <a href="./airline_flight/<?= $item['request_code']; ?>" class="action-btn green">Открыть рейс</a>
+                        <? else: ?>
+                            <? if ($item['airline_name']): ?>
+                                <a href="./airline_charter/<?= $item['request_code']; ?>" class="action-btn green">Управление заявкой</a>
+                            <? else: ?>
+                                <a href="./add_airline_to_charter_request/<?= $item['id']; ?>" class="action-btn green">Взять в работу</a>
+                                <a href="./report/503" class="action-btn">Неактаульно</a>
+                            <? endif; ?>
+                            
+                        <? endif; ?>
+                    </td>
+                </tr>
+            <? endforeach; ?>
+        </tbody>
+    </table>
+
+    <? if (count($data) == 0): ?>
+        <i>Заявок пока нет</i>
+    <? endif; ?>
+</div>

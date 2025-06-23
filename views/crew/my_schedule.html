@@ -1,0 +1,49 @@
+<div class="clm">
+    <div class="navi">
+        <h2>Мое расписание</h2>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Номер рейса</th>
+                <th>Код рейса</th>
+                <th>Авиакомпания</th>
+                <th>Самолет (регистрация)</th>
+                <th>Вместимость</th>
+                <th>Откуда</th>
+                <th>Куда</th>
+                <th>Вылет</th>
+                <th>Прилет</th>
+                <th>Пассажиров (чартер)</th>
+                <th>Куплено билетов</th>
+                <th>Статус</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($data as $item): ?>
+                <tr>
+                    <td><?= htmlspecialchars($item['flight_number']); ?></td>
+                    <td><?= htmlspecialchars($item['flight_code']); ?></td>
+                    <td><?= htmlspecialchars($item['airline_name']); ?></td>
+                    <td><?= htmlspecialchars($item['airplane_name']) . ' (' . htmlspecialchars($item['airplane_registration']) . ')'; ?></td>
+                    <td><?= (int)$item['airplane_capacity']; ?></td>
+                    <td><?= htmlspecialchars($item['dep_airport']); ?></td>
+                    <td><?= htmlspecialchars($item['arr_airport']); ?></td>
+                    <td><?= date('Y-m-d H:i', strtotime($item['dep_time'])); ?></td>
+                    <td><?= date('Y-m-d H:i', strtotime($item['arr_time'])); ?></td>
+                    <td><?= (int)$item['charter_passenger_count']; ?></td>
+                    <td><?= (int)$item['tickets_sold']; ?></td>
+                    <td><?= htmlspecialchars($item['flight_status']); ?></td>
+                    <td>
+                        <a href="./flight_passengers/<?= urlencode($item['flight_code']); ?>" class="action-btn green">Посмотреть пассажиров</a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+
+    <?php if (count($data) === 0): ?>
+        <i>У вас пока нет актуальных рейсов</i>
+    <?php endif; ?>
+</div>

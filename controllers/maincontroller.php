@@ -87,7 +87,7 @@ class MainController
     if (isset($_COOKIE['uid'])){
       $user = $this->userModel->getUser();
       if ($user['access_level'] == 5){
-        $userInfo = $this->userModel->getUserInfoById($user['id']);
+        $userInfo = $this->userModel->getPassengerById($user['id']);
       }
     }
 
@@ -109,6 +109,37 @@ class MainController
     $this->helper->outputCommonHead($title, $menu_active, $styles);
     require_once  './views/book_flight.html';
     $this->helper->outputCommonFoot($scripts);
+  }
+
+
+
+  public function actionTicketInfo($data){
+    $booking_number = $data[0];
+
+    $styles = [CSS . '/ticket-info.css'];
+    $scripts = [];
+
+    $title = "Информация о бронировании";
+    
+    $menu_active = '';
+
+    $bookingModel = new Booking();
+
+    $result = $bookingModel->getBookingDataByNumber($booking_number);
+
+    if ($result['booking']){
+      $bookingInfo = $result['booking'];
+      $passengers = $result['passengers'];
+    } else{
+       header("Location: " . FULL_SITE_ROOT . "/report/404");
+    }
+
+
+    $this->helper->outputCommonHead($title, $menu_active, $styles);
+    require_once   './views/common/nav.html';
+    require_once  './views/ticket-info.html';
+    $this->helper->outputCommonFoot($scripts);
+
   }
 
   public function actionCharterNumber(){
@@ -245,15 +276,20 @@ public function actionCharterCheck() {
 
     if (isset($_POST['booking_number'])){
 
-      $data = $bookingModel->getBookingByNumberAndEmail($_POST['reg_email'], $_POST['booking_number']);
-
-      if ($data){
-        $dep_time = new DateTime($data[0]['dep_time']);
+      $result = $bookingModel->getBookingData($_POST['reg_email'], $_POST['booking_number']);
+      if ($result['booking']){
+        $bookingInfo = $result['booking'];
+        $passengers = $result['passengers'];
+        $dep_time = new DateTime($bookingInfo['dep_time']);
         $now = new DateTime();
         $interval = $now->diff($dep_time);
         $hours_to_departure = ($dep_time->getTimestamp() - $now->getTimestamp()) / 3600;
-        $seats = $bookingModel->getAvailableSeats($data[0]['flight_id']);
+        $seats = $bookingModel->getAvailableSeats($bookingInfo['flight_id']);
       }
+    }
+
+    if (isset($_COOKIE['uid'])){
+      $user = $this->userModel->getUser();
     }
 
     if (isset($_POST['check_in_seat0'])){

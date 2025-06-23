@@ -1,0 +1,50 @@
+<div class="clm">
+        <h1>Рейс <?= $flightInfo['flight_number']; ?></h1>
+        <table class="info_table">
+        <tr>
+            <th>Код рейса: (передайте этот код вашим пассажирам)</th>
+            <td><?= $flightInfo['flight_code']; ?></td>
+        </tr>
+        <tr>
+            <th>Вылет:</th>
+            <td><?= $flightInfo['dep_airport']; ?> <?= $flightInfo['dep_time']; ?></td>
+        </tr>
+        <tr>
+            <th>Прилет:</th>
+            <td><?= $flightInfo['arr_airport']; ?> <?= $flightInfo['arr_time']; ?></td>
+        </tr>
+        <tr>
+            <th>Авиакомпания:</th>
+            <td><?= $flightInfo['airline_name']; ?></td>
+        </tr>
+        <tr>
+            <th>Самолет:</th>
+            <td><?= $flightInfo['airplane_name']; ?></td>
+        </tr>
+    </table>
+    <h2 class="table-title">Ваши пассажиры, забронировавшие рейс по указанному коду</h2>
+    <table class="table">
+    <thead>
+        <tr>
+            <th>Пассажир</th>
+            <th>Номер бронирования</th>
+            <th>Статус</th>
+            <th>Email</th>
+            <th>Место</th>
+            <th>Действие</th>
+        </tr>
+    </thead>
+    <tbody>
+        <? foreach($passengers as $passenger): ?>
+            <tr>
+                <td><?= htmlspecialchars($passenger['surname'] . ' ' . $passenger['name'] . ' ' . $passenger['patronymic']); ?></td>
+                <td><?= htmlspecialchars($passenger['booking_number']); ?></td>
+                <td><?= htmlspecialchars($passenger['status']); ?></td>
+                <td><?= htmlspecialchars($passenger['passenger_email']); ?></td>
+                <td><?= htmlspecialchars($passenger['seat_number'] ?? ''); ?></td>
+                <td><a href="<?= FULL_SITE_ROOT; ?>/report/503" class="red">Удалить пассажира</a></td>
+            </tr>
+        <? endforeach; ?>
+    </tbody>
+</table>
+</div>

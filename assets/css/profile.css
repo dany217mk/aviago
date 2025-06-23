@@ -1,5 +1,5 @@
 .main-block{
-    width: 1440px;
+    width: 100%;
     margin: 0 auto;
     margin-top: 15px;
     position: relative;
@@ -9,6 +9,7 @@
     width: 210px;
     border-right: 1px solid #eee;
     height: 100%;
+    left: 10px;
 }
 .menu ul {
     list-style: none;
@@ -44,9 +45,10 @@ footer {
 }
 
 .clm {
-    width: 1200px;
-    margin-right: 0;
-    margin-left: auto;
+    width: 83%;
+    overflow-x: scroll;
+    margin-right: 10px;
+    margin-left: 250px;
     padding: 20px;
     border: 1px solid #eee;
 }
@@ -77,5 +79,72 @@ footer {
     margin: 10px 0;
 }
 .airline_name{
+    margin-top: 20px;
+}
+
+
+.navi{
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 15px;
+}
+.link_add{
+  border: 2px solid #ccc;
+  padding: 1rem;
+  color: #434343;
+  text-decoration: none;
+  width: 200px;
+  display: block;
+  transition: all 0.3s ease;
+}
+.link_add:hover{
+    background: #ccc;
+}
+tbody td:last-child a{
+  border: 1px solid rgb(118, 118, 118);
+  text-align: center;
+  text-decoration: none;
+  background: rgb(239, 239, 239);
+  margin-left: 15px;
+  padding: 1px 6px;
+  display: block;
+}
+tbody td:last-child a:last-child{
+  color: red;
+}
+tbody td a.red{
+    color: red !important;
+}
+tbody td a.green{
+    color: green !important;
+}
+tbody td a.yellow{
+    color: #d1d103 !important;
+    margin-bottom: 10px;
+}
+tbody td a.blue{
+    color: blue !important;
+    margin-bottom: 10px;
+}
+tbody td a.usual{
+    border: none !important;
+    background: transparent !important;
+    color: #007bff !important;
+}
+tbody td:last-child a:first-child{
+  color: green;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+#charter_decision_form, #crew_form{
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+    gap: 20px;
+    margin-top: 10px;
+}
+.form-title{
     margin-top: 20px;
 }
