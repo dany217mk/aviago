@@ -112,7 +112,7 @@ git clone https://github.com/dany217mk/aviago
 2. Установить PostgreSQL
 3. Создать базу данных
 4. Импортировать файл aviago_backup.sql
-5. Создать файл config/constants.php (по примеру constants.example.php)
+5. Создать файл config/constants.php (по примеру config/constants.example.php)
 6. Включить Apache + PostgreSQL сервер
 
    ---
