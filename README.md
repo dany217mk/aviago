@@ -116,6 +116,6 @@ git clone https://github.com/dany217mk/aviago
 6. Включить Apache + PostgreSQL сервер
 
    ---
-Разработчик: [Москалец Данила](https://vk.com/dany_217mk)
+Разработчик: [Москалец Данила](https://t.com/moskaletsd)
 ***
    by MKStudio
